@@ -9,10 +9,15 @@ chmod 700 "$0"
 echo "=== Network Storage Mount Setup ==="
 
 # Get credentials securely (not stored in script)
-read -p "Enter username: " SAMBA_USER
-read -sp "Enter password: " SAMBA_PASS
+echo -n "Enter username: "
+read SAMBA_USER
+
+echo -n "Enter password: "
+read -s SAMBA_PASS
 echo
-read -p "Enter server address: " SERVER_ADDRESS
+
+echo -n "Enter server address: "
+read SERVER_ADDRESS
 echo
 
 # Validate inputs
@@ -49,7 +54,3 @@ fi
 # Mount immediately
 sudo mount /mnt/network-storage
 echo "✓ Storage mounted successfully"
-
-
-# Download netinst image 
-wget https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-13.3.0-amd64-netinst.iso

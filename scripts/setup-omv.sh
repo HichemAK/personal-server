@@ -23,6 +23,15 @@ deb [signed-by=/usr/share/keyrings/openmediavault-archive-keyring.gpg] https://p
 deb [signed-by=/usr/share/keyrings/openmediavault-archive-keyring.gpg] https://downloads.sourceforge.net/project/openmediavault/packages synchrony partner
 EOF
 
+
+echo "Preconfiguring Postfix..."
+
+echo "postfix postfix/main_mailer_type select Internet with smarthost" | sudo debconf-set-selections
+echo "postfix postfix/mailname string $(hostname -f)" | sudo debconf-set-selections
+echo "postfix postfix/relayhost string " | sudo debconf-set-selections  # Empty!
+
+echo "✓ Postfix preconfigured (smarthost mode, relay host empty)"
+
 export LANG=C.UTF-8
 export DEBIAN_FRONTEND=noninteractive
 export APT_LISTCHANGES_FRONTEND=none
@@ -36,13 +45,13 @@ sudo apt --yes --auto-remove --show-upgraded \
 
 sudo omv-confdbadm populate
 
-echo "\n\n\n\n"
+echo -e "\n\n\n\n"
 echo "VERY IMPORTANT"
 echo "=============="
 echo "The access to the HTTP server is deactivated using a firewall and you can access this machine exclusively through SSH."
 echo "I strongly advise you to update the password of the OpenMediaVault admin and setup HTTPS in the WebUI"
 echo "To do that visit http://localhost:9909 in your local machine (not this one) to get access to the WebUI. The default username and password should be \"admin\" and \"openmediavault\" "
-echo "\n\n"
+echo -e "\n\n"
 echo "Once the configuration is completed. Interrupt this execution (using Ctrl-C), then execute the following script to grant to the internet the access to your server : /root/server/allow-connections.sh" 
 echo "This script will run indefinitely. DO NOT CLOSE IT UNTIL ABOVE INSTRUCTIONS ARE COMPLETED."
 
