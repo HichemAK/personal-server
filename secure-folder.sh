@@ -8,3 +8,4 @@ sudo chown -R root:root "$SCRIPT_DIR"
 # Set permissions: 700 for directories, 600 for files
 sudo find "$SCRIPT_DIR" -type d -exec chmod 700 {} \;
 sudo find "$SCRIPT_DIR" -type f -exec chmod 600 {} \;
+sudo find "$SCRIPT_DIR" -type f -name "*.sh" -exec chmod u+x {} \;

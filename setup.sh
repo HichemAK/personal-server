@@ -10,6 +10,6 @@ sudo apt update
 sudo apt install cifs-utils -y
 
 # Setup mount
-./mount-setup.sh
+./setup-mount.sh
 
 # Setup openvaultmedia

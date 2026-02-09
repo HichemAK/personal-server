@@ -41,7 +41,7 @@ sudo mkdir -p /mnt/network-storage
 
 # Add to fstab if not already there
 if ! grep -q "network-storage" /etc/fstab; then
-    echo "//$SERVER_ADDRESS/backup /mnt/network-storage cifs credentials=/root/.smbcredentials,iocharset=utf8,_netdev 0 0" | sudo tee -a /etc/fstab
+    echo "$SERVER_ADDRESS /mnt/network-storage cifs credentials=/root/.smbcredentials,iocharset=utf8,_netdev 0 0" | sudo tee -a /etc/fstab
     echo "✓ Added mount to /etc/fstab"
 fi
 
