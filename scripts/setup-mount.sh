@@ -49,3 +49,7 @@ fi
 # Mount immediately
 sudo mount /mnt/network-storage
 echo "✓ Storage mounted successfully"
+
+
+# Download netinst image 
+wget https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-13.3.0-amd64-netinst.iso
