@@ -11,6 +11,7 @@ echo "=== Network Storage Mount Setup ==="
 # Get credentials securely (not stored in script)
 read -p "Enter username: " SAMBA_USER
 read -sp "Enter password: " SAMBA_PASS
+echo
 read -p "Enter server address: " SERVER_ADDRESS
 echo
 
