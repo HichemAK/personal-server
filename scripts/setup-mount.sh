@@ -1,56 +1,41 @@
 #!/bin/bash
 # setup-mount.sh
+set -euo pipefail
 
-set -euo pipefail  # Exit on error, undefined variables
+echo "=== SFTP Storage Mount Setup ==="
+echo ""
 
-# Secure the script itself
-chmod 700 "$0"
+# Get credentials
+echo -n "Enter username (e.g., u123456): "
+read SFTP_USER
 
-echo "=== Network Storage Mount Setup ==="
-
-# Get credentials securely (not stored in script)
-echo -n "Enter username: "
-read SAMBA_USER
-
-echo -n "Enter password: "
-read -s SAMBA_PASS
-echo
-
-echo -n "Enter server address: "
+echo -n "Enter server address (e.g., u123456.your-storagebox.de): "
 read SERVER_ADDRESS
-echo
 
-# Validate inputs
-if [[ -z "$SAMBA_USER" ]] || [[ -z "$SAMBA_PASS" ]] || [[ -z "$SERVER_ADDRESS" ]]; then
-    echo "Error: Username, password, and server address of the Storage Box are required (See Hetzner Console)"
-    exit 1
-fi
+# echo -n "SSH key path (default: /root/server/id_ed25519): "
+# read SSH_KEY
+SSH_KEY=${SSH_KEY:-/root/server/id_ed25519}
 
-# Create credentials file
-sudo bash -c "cat > /root/.smbcredentials << EOF
-username=$SAMBA_USER
-password=$SAMBA_PASS
-EOF"
+SSH_PORT=23  # Hetzner default
 
-# Clear variables from memory
-unset SAMBA_USER
-unset SAMBA_PASS
-
-# Secure the credentials file
-sudo chmod 600 /root/.smbcredentials
-sudo chown root:root /root/.smbcredentials
-
-echo "✓ Credentials file created securely at /root/.smbcredentials"
+# Ensure correct permissions
+sudo chmod 600 "$SSH_KEY"
+echo "✓ SSH key found at $SSH_KEY"
 
 # Create mount point
-sudo mkdir -p /mnt/network-storage
+MOUNT_POINT="/mnt/storagebox"
+sudo mkdir -p "$MOUNT_POINT"
 
-# Add to fstab if not already there
-if ! grep -q "network-storage" /etc/fstab; then
-    echo "$SERVER_ADDRESS /mnt/network-storage cifs credentials=/root/.smbcredentials,iocharset=utf8,_netdev 0 0" | sudo tee -a /etc/fstab
-    echo "✓ Added mount to /etc/fstab"
+# Add to fstab
+if ! grep -q "$MOUNT_POINT" /etc/fstab; then
+    # Add StrictHostKeyChecking=no to fstab entry
+    echo "${SFTP_USER}@${SERVER_ADDRESS}:/home $MOUNT_POINT fuse.sshfs IdentityFile=$SSH_KEY,port=$SSH_PORT,StrictHostKeyChecking=no,_netdev,allow_other,default_permissions 0 0" | sudo tee -a /etc/fstab
+    echo "✓ Added to /etc/fstab"
 fi
 
-# Mount immediately
-sudo mount /mnt/network-storage
-echo "✓ Storage mounted successfully"
+# Mount
+sudo systemctl daemon-reload
+sudo mount "$MOUNT_POINT"
+
+echo "✓ Storage mounted at $MOUNT_POINT"
+echo "✓ Will auto-mount on boot"

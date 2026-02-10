@@ -9,8 +9,8 @@ cd $SCRIPT_DIR
 ./secure-folder.sh
 
 # Install packages
-sudo apt update
-sudo apt install cifs-utils ufw -y
+sudo apt-get update
+sudo apt-get install sshfs ufw -y
 
 # Blocking everything except SSH
 echo "🔒 Blocking all access except SSH..."

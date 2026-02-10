@@ -7,6 +7,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo "Make sure the SSH access to your Hetzner VM is granted password-less!"
 
 read -p "Enter VM IP address: " IP
+
+ssh-keygen -f '/home/rareseven/.ssh/known_hosts' -R "$IP" || true
+ssh-keyscan -H $IP >> ~/.ssh/known_hosts
+
 rsync -avz $SCRIPT_DIR/scripts/ root@$IP:/root/server
 
 # Activate SSH forwarding
