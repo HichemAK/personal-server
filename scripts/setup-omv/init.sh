@@ -8,13 +8,13 @@ echo "Make sure the SSH access to your Hetzner VM is granted password-less!"
 
 read -p "Enter VM IP address: " IP
 
-ssh-keygen -f '/home/rareseven/.ssh/known_hosts' -R "$IP" || true
+ssh-keygen -f '~/.ssh/known_hosts' -R "$IP" || true
 ssh-keyscan -H $IP >> ~/.ssh/known_hosts
 
-rsync -avz $SCRIPT_DIR/scripts/setup-omv/ root@$IP:/root/server
+rsync -avz $SCRIPT_DIR/scripts/setup-omv/ root@$IP:/root/setup-omv
 
 # Activate SSH forwarding
-ssh root@$IP '/root/server/secure-folder.sh && /root/server/toggle-ssh-forwarding.sh yes'
+ssh root@$IP '/root/setup-omv/secure-folder.sh && /root/setup-omv/toggle-ssh-forwarding.sh yes'
 
 # Launch setup
-ssh -t -L 9909:localhost:80 root@$IP '/root/server/setup.sh'
+ssh -t -L 9909:localhost:80 root@$IP '/root/setup-omv/setup.sh'

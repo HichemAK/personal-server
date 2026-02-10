@@ -12,9 +12,9 @@ read SFTP_USER
 echo -n "Enter server address (e.g., u123456.your-storagebox.de): "
 read SERVER_ADDRESS
 
-# echo -n "SSH key path (default: /root/server/id_ed25519): "
+# echo -n "SSH key path (default: /root/setup-omv/id_ed25519): "
 # read SSH_KEY
-SSH_KEY=${SSH_KEY:-/root/server/id_ed25519}
+SSH_KEY=${SSH_KEY:-/root/setup-omv/id_ed25519}
 
 SSH_PORT=23  # Hetzner default
 
