@@ -23,4 +23,4 @@ echo ""
 ./setup-mount.sh
 
 # Setup openvaultmedia
-./setup-omv.sh
+./install-omv.sh
