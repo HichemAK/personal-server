@@ -1,6 +1,8 @@
 # Setup OpenMediaVault
 # Commands fetched directly from OMV doc (https://docs.openmediavault.org/en/latest/installation/on_debian.html)
 
+export DEBIAN_FRONTEND=noninteractive
+
 sudo apt install --yes systemd-resolved psmisc
 sudo systemctl enable --now systemd-resolved.service
 sudo systemctl restart systemd-resolved.service
@@ -24,16 +26,13 @@ deb [signed-by=/usr/share/keyrings/openmediavault-archive-keyring.gpg] https://d
 EOF
 
 
-echo "Preconfiguring Postfix..."
-
+# Pre-filliung postfix options
 echo "postfix postfix/main_mailer_type select Internet with smarthost" | sudo debconf-set-selections
 echo "postfix postfix/mailname string $(hostname -f)" | sudo debconf-set-selections
 echo "postfix postfix/relayhost string " | sudo debconf-set-selections  # Empty!
 
-echo "✓ Postfix preconfigured (smarthost mode, relay host empty)"
 
 export LANG=C.UTF-8
-export DEBIAN_FRONTEND=noninteractive
 export APT_LISTCHANGES_FRONTEND=none
 sudo apt update
 sudo apt --yes --auto-remove --show-upgraded \
