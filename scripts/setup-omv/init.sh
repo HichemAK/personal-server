@@ -11,7 +11,7 @@ read -p "Enter VM IP address: " IP
 ssh-keygen -f '~/.ssh/known_hosts' -R "$IP" || true
 ssh-keyscan -H $IP >> ~/.ssh/known_hosts
 
-rsync -avz $SCRIPT_DIR/scripts/setup-omv/ root@$IP:/root/setup-omv
+rsync -avz $SCRIPT_DIR/ root@$IP:/root/setup-omv
 
 # Activate SSH forwarding
 ssh root@$IP '/root/setup-omv/secure-folder.sh && /root/setup-omv/toggle-ssh-forwarding.sh yes'
