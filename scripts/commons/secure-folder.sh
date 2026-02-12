@@ -2,8 +2,8 @@
 
 set -euo pipefail  # Exit on error, undefined variables
 
-# Get the directory where the script is located
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Get the directory where the scripts are located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/.."
 
 # Change ownership recursively
 sudo chown -R root:root "$SCRIPT_DIR"

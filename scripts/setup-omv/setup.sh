@@ -2,15 +2,12 @@
 
 set -euo pipefail  # Exit on error, undefined variables
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/.."
 cd $SCRIPT_DIR
-
-# Secure the scripts folder
-./secure-folder.sh
 
 # Install packages
 sudo apt-get update
-sudo apt-get install sshfs ufw -y
+sudo apt-get install ufw -y
 
 # Blocking everything except SSH
 echo "🔒 Blocking all access except SSH..."
@@ -20,7 +17,7 @@ echo "✓ Firewall enabled - only SSH accessible"
 echo ""
 
 # Setup mount
-./setup-mount.sh
+./commons/setup-mount.sh
 
 # Setup openvaultmedia
-./install-omv.sh
+./setup-omv/install-omv.sh
