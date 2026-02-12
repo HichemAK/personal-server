@@ -40,11 +40,12 @@ case "$MOUNT_CHOICE" in
         ;;
     2)
         echo "=== SMB Mount ==="
-        sudo apt-get install -y cifs-utils
 
-        echo -n "Enter password: "
+        echo -n "Enter SMB password: "
         read -s SMB_PASS
         echo ""
+
+        sudo apt-get install -y cifs-utils
 
         CRED_FILE="/etc/samba/credentials_storagebox"
         sudo mkdir -p /etc/samba
@@ -62,11 +63,12 @@ EOF
         ;;
     3)
         echo "=== WebDAV Mount ==="
-        sudo apt-get install -y davfs2
 
-        echo -n "Enter password: "
+        echo -n "Enter WebDAV password: "
         read -s WEBDAV_PASS
         echo ""
+
+        sudo apt-get install -y davfs2
 
         WEBDAV_URL="https://${SERVER_ADDRESS}"
         DAVFS_SECRETS="/etc/davfs2/secrets"

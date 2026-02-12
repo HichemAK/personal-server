@@ -18,3 +18,4 @@ Once they are met, launch `setup.sh` at the root of this project, select a scena
     - VM - 2vCPUs + 4GB RAM + 40GB SSD (CX23): Enable SMB Support + WebDAV + SSH Support
 2. Grant your local machine SSH access to the VM (passwordless).
 3. Make the Storage Box accessible through an SSH key whose public and private part should be located in `scripts/commons` (they will be copied to the VM).
+4. You need a setuped domain (I personally used the CloudFlare Registrar).
