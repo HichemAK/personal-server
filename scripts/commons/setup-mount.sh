@@ -7,36 +7,46 @@ MOUNT_POINT="/mnt/storagebox"
 echo "=== Storage Mount Setup ==="
 echo ""
 echo "Select mount type:"
-echo "  1) SFTP"
+echo "  1) SFTP (recommended)"
 echo "  2) SMB"
 echo "  3) WebDAV"
+echo "  4) Skip (no external drive)"
 echo ""
-echo -n "Choice [1-3]: "
+echo -n "Choice [1-4]: "
 read MOUNT_CHOICE
+
+if [ "$MOUNT_CHOICE" = "4" ]; then
+    echo "Skipping storage mount setup."
+    return 0
+fi
 
 echo -n "Enter username (e.g., u123456): "
 read MOUNT_USER
 
 echo -n "Enter server address (e.g., u123456.your-storagebox.de): "
-read SERVER_ADDRESS
+read MOUNT_ADDRESS
 
 sudo mkdir -p "$MOUNT_POINT"
 
 case "$MOUNT_CHOICE" in
     1)
         echo "=== SFTP Mount ==="
+
+        echo -n "Enter SFTP password: "
+        read -s SFTP_PASS
+        echo ""
+
         sudo apt-get install -y sshfs
 
-        SSH_KEY=${SSH_KEY:-/root/scripts/commons/id_ed25519}
         SSH_PORT=23
 
-        sudo chmod 600 "$SSH_KEY"
-        echo "✓ SSH key found at $SSH_KEY"
-
         if ! grep -q "$MOUNT_POINT" /etc/fstab; then
-            echo "${MOUNT_USER}@${SERVER_ADDRESS}:/home $MOUNT_POINT fuse.sshfs IdentityFile=$SSH_KEY,port=$SSH_PORT,StrictHostKeyChecking=no,_netdev,allow_other,default_permissions 0 0" | sudo tee -a /etc/fstab
+            echo "${MOUNT_USER}@${MOUNT_ADDRESS}:/home $MOUNT_POINT fuse.sshfs port=$SSH_PORT,password_stdin,StrictHostKeyChecking=no,_netdev,allow_other,default_permissions 0 0" | sudo tee -a /etc/fstab
             echo "✓ Added to /etc/fstab"
         fi
+
+        echo "$SFTP_PASS" | sudo sshfs "${MOUNT_USER}@${MOUNT_ADDRESS}:/home" "$MOUNT_POINT" -o port=$SSH_PORT,password_stdin,StrictHostKeyChecking=no,allow_other,default_permissions
+        echo "✓ SFTP mounted with password"
         ;;
     2)
         echo "=== SMB Mount ==="
@@ -57,7 +67,7 @@ EOF
         echo "✓ Credentials stored"
 
         if ! grep -q "$MOUNT_POINT" /etc/fstab; then
-            echo "//${SERVER_ADDRESS}/backup $MOUNT_POINT cifs credentials=$CRED_FILE,_netdev 0 0" | sudo tee -a /etc/fstab
+            echo "//${MOUNT_ADDRESS}/backup $MOUNT_POINT cifs credentials=$CRED_FILE,_netdev 0 0" | sudo tee -a /etc/fstab
             echo "✓ Added to /etc/fstab"
         fi
         ;;
@@ -70,7 +80,7 @@ EOF
 
         sudo apt-get install -y davfs2
 
-        WEBDAV_URL="https://${SERVER_ADDRESS}"
+        WEBDAV_URL="https://${MOUNT_ADDRESS}"
         DAVFS_SECRETS="/etc/davfs2/secrets"
 
         if ! grep -q "$WEBDAV_URL" "$DAVFS_SECRETS" 2>/dev/null; then
@@ -86,12 +96,15 @@ EOF
         ;;
     *)
         echo "Invalid choice"
-        exit 1
+        return 1
         ;;
 esac
 
 sudo systemctl daemon-reload
-sudo mount "$MOUNT_POINT"
+
+if [ "$MOUNT_CHOICE" != "1" ]; then
+    sudo mount "$MOUNT_POINT"
+fi
 
 echo "✓ Storage mounted at $MOUNT_POINT"
 echo "✓ Will auto-mount on boot"

@@ -5,17 +5,11 @@ Use-case: You want to setup a server in Hetzner whose main storage is a Storage 
 
 Once they are met, launch `setup.sh` at the root of this project, select a scenario, and follow the instructions.
 
-## Scenario 1: Install OpenMediaVault
-1. Open these two resources in Hetzner:
-    - 1TB Hetzner Storage Box (BX11): Use Debian as an OS
-    - VM - 2vCPUs + 4GB RAM + 40GB SSD (CX23): Enable SMB Support + WebDAV + SSH Support
-2. Grant your local machine SSH access to the VM (passwordless).
-3. If you want to mount the Storage Box as SFTP, make it accessible through an SSH key whose public and private part should be located in `scripts/commons` (they will be copied to the VM).
 
-## Scenario 2: Install NextCloud
-1. Open these two resources in Hetzner:
-    - 1TB Hetzner Storage Box (BX11): Use Debian as an OS
-    - VM - 2vCPUs + 4GB RAM + 40GB SSD (CX23): Enable SMB Support + WebDAV + SSH Support
-2. Grant your local machine SSH access to the VM (passwordless).
-3. Make the Storage Box accessible through an SSH key whose public and private part should be located in `scripts/commons` (they will be copied to the VM).
-4. You need a setuped domain (I personally used the CloudFlare Registrar).
+## Requirements
+
+All of following scenarios suppose you have the following hardware:
+- 1TB Hetzner Storage Box (BX11): Enable access through password and enable one of SMB Support/WebDAV/SSH Support 
+- VM - 4vCPUs + 8GB RAM + 80GB SSD (CX33): Use Debian as an OS. Grant your local machine SSH access to this VM (passwordless).
+
+You need a **setuped domain** with the approriate DNS records. Look at the official documentation of the tool you want to install.
