@@ -3,7 +3,7 @@ set -euo pipefail  # Exit on error, undefined variables
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/.."
 cd $SCRIPT_DIR
 
-./commons/install-caddy.sh
+./commons/install-nginx.sh
 
 sudo apt update
 sudo apt install -y git openssl curl gawk coreutils grep jq
@@ -15,13 +15,13 @@ cd mailcow-dockerized
 
 ./generate_config.sh
 
-# Bind to localhost only — Caddy will be the public-facing proxy
+# Bind to localhost only — Nginx will be the public-facing proxy
 sed -i 's/^HTTP_BIND=.*/HTTP_BIND=127.0.0.1/' mailcow.conf
 sed -i 's/^HTTP_PORT=.*/HTTP_PORT=8090/' mailcow.conf
 sed -i 's/^HTTPS_BIND=.*/HTTPS_BIND=127.0.0.1/' mailcow.conf
 sed -i 's/^HTTPS_PORT=.*/HTTPS_PORT=8443/' mailcow.conf
 
-# Disable Mailcow's built-in Let's Encrypt — Caddy handles TLS now
+# Disable Mailcow's built-in Let's Encrypt — Nginx handles TLS now
 sed -i 's/^SKIP_LETS_ENCRYPT=.*/SKIP_LETS_ENCRYPT=y/' mailcow.conf
 
 echo "You can change the /opt/mailcow-dockerized/mailcow.conf to configure MailCow."
@@ -42,4 +42,4 @@ wait $! || true
 trap - INT
 
 
-./setup-mailcow/config-caddy.sh
+./setup-mailcow/config-nginx.sh

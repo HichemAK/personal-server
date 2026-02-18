@@ -4,13 +4,13 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/.."
 cd $SCRIPT_DIR
 
 
-./commons/install-caddy.sh
+./commons/install-nginx.sh
 ./commons/install-docker.sh
 
 source ./commons/setup-mount.sh
 mkdir /mnt/storagebox/nextcloud || true
 
-./setup-nextcloud/config-caddy.sh
+./setup-nextcloud/config-nginx.sh
 
 wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq && chmod +x /usr/local/bin/yq
 cd setup-nextcloud
