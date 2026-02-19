@@ -7,7 +7,9 @@ echo ""
 echo -n "Enter the FQDN for Nextcloud (e.g., cloud.yourdomain.com): "
 read NC_FQDN
 
-sudo tee /etc/nginx/sites-available/nextcloud > /dev/null <<EOF
+curl -L https://ssl-config.mozilla.org/ffdhe2048.txt -o /etc/dhparam
+
+sudo tee /etc/nginx/conf.d/nextcloud.conf > /dev/null <<EOF
 map \$http_upgrade \$connection_upgrade {
     default upgrade;
     '' close;
@@ -24,7 +26,7 @@ server {
         return 301 https://\$host\$request_uri;
     }
 
-    # isten 443 ssl http2;      # for nginx versions below v1.25.1
+    # listen 443 ssl http2;      # for nginx versions below v1.25.1
     # listen [::]:443 ssl http2; # for nginx versions below v1.25.1 - comment to disable IPv6
 
     listen 443 ssl;      # for nginx v1.25.1+
@@ -36,7 +38,7 @@ server {
     http3 on;                                 # uncomment to enable HTTP/3 / QUIC - supported on nginx v1.25.0+
     quic_gso on;                              # uncomment to enable HTTP/3 / QUIC - supported on nginx v1.25.0+
     quic_retry on;                            # uncomment to enable HTTP/3 / QUIC - supported on nginx v1.25.0+
-    quic_bpf on;                              # improves  HTTP/3 / QUIC - supported on nginx v1.25.0+, if nginx runs as a docker container you need to give it privileged permission to use this option
+    # quic_bpf on;                              # improves  HTTP/3 / QUIC - supported on nginx v1.25.0+, if nginx runs as a docker container you need to give it privileged permission to use this option
     add_header Alt-Svc 'h3=":443"; ma=86400'; # uncomment to enable HTTP/3 / QUIC - supported on nginx v1.25.0+
 
     proxy_buffering off;
@@ -87,8 +89,7 @@ server {
 }
 EOF
 
-sudo ln -sf /etc/nginx/sites-available/nextcloud /etc/nginx/sites-enabled/nextcloud
-
+certbot certonly -d ${NC_FQDN}
 sudo nginx -t
-sudo systemctl reload nginx
+# sudo systemctl reload nginx
 echo "✓ Nginx configured for Nextcloud at http://${NC_FQDN}"
