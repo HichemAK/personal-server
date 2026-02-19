@@ -8,48 +8,65 @@ echo -n "Enter the domain you use for MailCow (format: domain.com): "
 read NC_FQDN
 
 MAILCOW_HOSTNAME=mail.${NC_FQDN}
+MAILCOW_PATH=/opt/mailcow-dockerized
 
 sudo mkdir -p /var/log/nginx
 
-sudo tee /etc/nginx/sites-available/mailcow > /dev/null <<EOF
+sudo tee /etc/nginx/conf.d/mailcow.conf > /dev/null <<EOF
 server {
-    listen 80;
-    server_name mail.${NC_FQDN} autodiscover.${NC_FQDN} autoconfig.${NC_FQDN};
-
-    access_log /var/log/nginx/${NC_FQDN}.access.log;
-
-    location / {
-        proxy_pass http://127.0.0.1:8090;
-        proxy_set_header Host \$host;
-        proxy_set_header X-Real-IP \$remote_addr;
-        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto \$scheme;
-    }
+  listen 80 default_server;
+  listen [::]:80 default_server;
+  server_name $MAILCOW_HOSTNAME autodiscover.* autoconfig.*;
+  return 301 https://\$host\$request_uri;
 }
+server {
+  listen 443 ssl http2;
+  listen [::]:443 ssl http2;
+  server_name $MAILCOW_HOSTNAME autodiscover.* autoconfig.*;
 
-# Uncomment and fill in cert paths to enable HTTPS:
-# server {
-#     listen 443 ssl;
-#     server_name mail.${NC_FQDN} autodiscover.${NC_FQDN} autoconfig.${NC_FQDN};
-#
-#     ssl_certificate     /etc/letsencrypt/live/${MAILCOW_HOSTNAME}/fullchain.pem;
-#     ssl_certificate_key /etc/letsencrypt/live/${MAILCOW_HOSTNAME}/privkey.pem;
-#
-#     access_log /var/log/nginx/${NC_FQDN}.access.log;
-#
-#     location / {
-#         proxy_pass http://127.0.0.1:8090;
-#         proxy_set_header Host \$host;
-#         proxy_set_header X-Real-IP \$remote_addr;
-#         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-#         proxy_set_header X-Forwarded-Proto \$scheme;
-#     }
-# }
+  ssl_certificate $MAILCOW_PATH/data/assets/ssl/cert.pem;
+  ssl_certificate_key $MAILCOW_PATH/data/assets/ssl/key.pem;
+
+  ssl_session_timeout 1d;
+  ssl_session_cache shared:SSL_MAIL:50m;
+  ssl_session_tickets off;
+
+  # See https://ssl-config.mozilla.org/#server=nginx for the latest ssl settings recommendations
+  # An example config is given below
+  ssl_protocols TLSv1.2;
+  ssl_ciphers HIGH:!aNULL:!MD5:!SHA1:!kRSA;
+  ssl_prefer_server_ciphers off;
+
+  location /Microsoft-Server-ActiveSync {
+    proxy_pass http://127.0.0.1:8090/Microsoft-Server-ActiveSync;
+    proxy_set_header Host \$http_host;
+    proxy_set_header X-Real-IP \$remote_addr;
+    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto \$scheme;
+    proxy_connect_timeout 75;
+    proxy_send_timeout 3650;
+    proxy_read_timeout 3650;
+    proxy_buffers 64 512k; # Needed since the 2022-04 Update for SOGo
+    client_body_buffer_size 512k;
+    client_max_body_size 0;
+  }
+
+  location / {
+    proxy_pass http://127.0.0.1:8090/;
+    proxy_set_header Host \$http_host;
+    proxy_set_header X-Real-IP \$remote_addr;
+    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto \$scheme;
+    client_max_body_size 0;
+  # The following Proxy Buffers has to be set if you want to use SOGo after the 2022-04 (April 2022) Update
+  # Otherwise a Login will fail like this: https://github.com/mailcow/mailcow-dockerized/issues/4537
+    proxy_buffer_size 128k;
+    proxy_buffers 64 512k;
+    proxy_busy_buffers_size 512k;
+  }
+}
 EOF
 
-sudo ln -sf /etc/nginx/sites-available/mailcow /etc/nginx/sites-enabled/mailcow
-
 sudo nginx -t
-sudo systemctl reload nginx
 
 echo "✓ Nginx configured for MailCow"

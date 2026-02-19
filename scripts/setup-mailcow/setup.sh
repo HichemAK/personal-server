@@ -20,9 +20,10 @@ sed -i 's/^HTTP_BIND=.*/HTTP_BIND=127.0.0.1/' mailcow.conf
 sed -i 's/^HTTP_PORT=.*/HTTP_PORT=8090/' mailcow.conf
 sed -i 's/^HTTPS_BIND=.*/HTTPS_BIND=127.0.0.1/' mailcow.conf
 sed -i 's/^HTTPS_PORT=.*/HTTPS_PORT=8443/' mailcow.conf
+sed -i 's/^HTTP_REDIRECT=.*/HTTP_REDIRECT=n/' mailcow.conf
 
-# Disable Mailcow's built-in Let's Encrypt — Nginx handles TLS now
-sed -i 's/^SKIP_LETS_ENCRYPT=.*/SKIP_LETS_ENCRYPT=y/' mailcow.conf
+# Disable Mailcow's built-in Let's Encrypt
+# sed -i 's/^SKIP_LETS_ENCRYPT=.*/SKIP_LETS_ENCRYPT=y/' mailcow.conf
 
 echo "You can change the /opt/mailcow-dockerized/mailcow.conf to configure MailCow."
 echo "Press Ctrl-C to continue..."
@@ -41,5 +42,7 @@ sleep infinity &
 wait $! || true
 trap - INT
 
-
+cd $SCRIPT_DIR
 ./setup-mailcow/config-nginx.sh
+sudo systemctl stop nginx || true
+sudo systemctl start nginx
