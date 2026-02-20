@@ -5,12 +5,12 @@ set -euo pipefail
 echo "=== Nginx Configuration for MailCow ==="
 echo ""
 echo -n "Enter the domain you use for MailCow (format: domain.com): "
-read NC_FQDN
+read DOMAIN
 
-MAILCOW_HOSTNAME=mail.${NC_FQDN}
+MAILCOW_HOSTNAME=mail.${DOMAIN}
 MAILCOW_PATH=/opt/mailcow-dockerized
 
-sudo mkdir -p /var/log/nginx
+certbot certonly -d $MAILCOW_HOSTNAME
 
 sudo tee /etc/nginx/conf.d/mailcow.conf > /dev/null <<EOF
 server {
@@ -24,8 +24,8 @@ server {
   listen [::]:443 ssl http2;
   server_name $MAILCOW_HOSTNAME autodiscover.* autoconfig.*;
 
-  ssl_certificate $MAILCOW_PATH/data/assets/ssl/cert.pem;
-  ssl_certificate_key $MAILCOW_PATH/data/assets/ssl/key.pem;
+  ssl_certificate /etc/letsencrypt/live/${MAILCOW_HOSTNAME}/fullchain.pem;   # managed by certbot on host machine
+  ssl_certificate_key /etc/letsencrypt/live/${MAILCOW_HOSTNAME}/privkey.pem; # managed by certbot on host machine
 
   ssl_session_timeout 1d;
   ssl_session_cache shared:SSL_MAIL:50m;
@@ -68,5 +68,12 @@ server {
 EOF
 
 sudo nginx -t
+
+cp /etc/letsencrypt/live/$MAILCOW_HOSTNAME/fullchain.pem /opt/mailcow-dockerized/data/assets/ssl/cert.pem
+cp /etc/letsencrypt/live/$MAILCOW_HOSTNAME/privkey.pem /opt/mailcow-dockerized/data/assets/ssl/key.pem
+postfix_c=$(docker ps -qaf name=postfix-mailcow)
+dovecot_c=$(docker ps -qaf name=dovecot-mailcow)
+nginx_c=$(docker ps -qaf name=nginx-mailcow)
+docker restart ${postfix_c} ${dovecot_c} ${nginx_c}
 
 echo "✓ Nginx configured for MailCow"
