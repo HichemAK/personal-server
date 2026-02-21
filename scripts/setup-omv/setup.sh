@@ -17,7 +17,7 @@ echo "✓ Firewall enabled - only SSH accessible"
 echo ""
 
 # Setup mount
-./commons/setup-mount.sh
+source ./commons/setup-mount.sh
 
 # Setup openvaultmedia
 ./setup-omv/install-omv.sh
