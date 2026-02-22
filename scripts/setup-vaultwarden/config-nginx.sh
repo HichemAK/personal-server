@@ -5,8 +5,6 @@ set -euo pipefail
 echo "=== Nginx Configuration for VaultWarden ==="
 echo ""
 
-sudo rm -f /etc/nginx/conf.d/vaultwarden.conf
-
 SERVER="${VAULTWARDEN_FQDN}"
 sudo rm -f /etc/nginx/conf.d/vaultwarden.conf
 sudo certbot certonly -d $SERVER --nginx --non-interactive --agree-tos --keep-until-expiring
