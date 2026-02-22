@@ -1,16 +1,19 @@
-set -euo pipefail  # Exit on error, undefined variables
+#!/bin/bash
+set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/.."
-cd $SCRIPT_DIR
+cd "$SCRIPT_DIR"
 
+# Load configuration
+source /root/scripts/.install
+
+./commons/install-docker.sh
 ./commons/install-nginx.sh
-
-source ./commons/setup-mount.sh
 
 source ./setup-vaultwarden/install.sh
 
 source ./setup-vaultwarden/config-nginx.sh
-sudo systemctl stop nginx || true
-sudo systemctl start nginx
+sudo systemctl reload nginx
 
-echo "Visit https://vm.$DOMAIN/admin and configure VaultWarden. The admin token is '$VW_ADMIN_TOKEN' (DON'T FORGET TO STORE IT SOMEWHERE)."
+echo "Visit https://$VAULTWARDEN_FQDN/admin and configure VaultWarden."
+echo "The admin token is '$VW_ADMIN_TOKEN' (DON'T FORGET TO STORE IT SOMEWHERE)."

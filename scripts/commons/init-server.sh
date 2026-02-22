@@ -1,16 +1,28 @@
 #!/bin/bash
 
-set -euo pipefail  # Exit on error, undefined variables
+set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/.."
 
-echo "Make sure the SSH access to your Hetzner VM is granted password-less!"
+# Load .install from project root (one level above scripts/)
+source "$SCRIPT_DIR/../.install"
 
-read -p "Enter VM IP address: " IP
+if [ -z "${SERVER_IP:-}" ]; then
+    echo "Error: SERVER_IP is not set. Please configure it in .install"
+    exit 1
+fi
+IP="$SERVER_IP"
+
+echo "Make sure the SSH access to your Hetzner VM is granted password-less!"
+echo "Connecting to $IP..."
 
 ssh-keygen -f "$HOME/.ssh/known_hosts" -R "$IP" || true
-ssh-keyscan -H $IP >> ~/.ssh/known_hosts
+ssh-keyscan -H "$IP" >> ~/.ssh/known_hosts
 
-rsync -avz $SCRIPT_DIR/ root@$IP:/root/scripts
+# Sync scripts to the remote server
+rsync -avz "$SCRIPT_DIR/" root@"$IP":/root/scripts
 
-ssh root@$IP 'sudo apt-get update && /root/scripts/commons/secure-folder.sh'
+# Sync .install separately (it lives one level above scripts/)
+rsync -avz "$SCRIPT_DIR/../.install" root@"$IP":/root/scripts/.install
+
+ssh root@"$IP" 'sudo apt-get update && /root/scripts/commons/secure-folder.sh'

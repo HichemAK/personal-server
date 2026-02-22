@@ -16,10 +16,7 @@ https://nginx.org/packages/debian `lsb_release -cs` nginx" \
 echo -e "Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900\n" \
     | sudo tee /etc/apt/preferences.d/99nginx
 sudo apt update
-sudo apt install nginx
+sudo apt install nginx -y
 
-# Remove the default placeholder site
-# sudo rm -f /etc/nginx/sites-enabled/default
-
-# sudo systemctl enable --now nginx
+sudo systemctl start nginx
 echo "✓ Nginx installed"

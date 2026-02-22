@@ -7,9 +7,10 @@ echo ""
 
 sudo rm -f /etc/nginx/conf.d/vaultwarden.conf
 
-SERVER=vw.$DOMAIN
+SERVER="${VAULTWARDEN_FQDN}"
 sudo rm -f /etc/nginx/conf.d/vaultwarden.conf
-sudo certbot certonly -d $SERVER
+sudo certbot certonly -d $SERVER --nginx --non-interactive --agree-tos --keep-until-expiring
+
 
 sudo tee /etc/nginx/conf.d/vaultwarden.conf > /dev/null <<EOF
 server {
