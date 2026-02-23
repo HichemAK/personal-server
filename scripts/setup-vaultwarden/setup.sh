@@ -5,7 +5,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/.."
 cd "$SCRIPT_DIR"
 
 # Load configuration
-source /root/scripts/.install
+source ~/scripts/.install
 
 ./commons/install-docker.sh
 ./commons/install-nginx.sh

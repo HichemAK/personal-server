@@ -20,9 +20,9 @@ ssh-keygen -f "$HOME/.ssh/known_hosts" -R "$IP" || true
 ssh-keyscan -H "$IP" >> ~/.ssh/known_hosts
 
 # Sync scripts to the remote server
-rsync -avz "$SCRIPT_DIR/" root@"$IP":/root/scripts
+rsync -avz "$SCRIPT_DIR/" root@"$IP":~/scripts
 
 # Sync .install separately (it lives one level above scripts/)
-rsync -avz "$SCRIPT_DIR/../.install" root@"$IP":/root/scripts/.install
+rsync -avz "$SCRIPT_DIR/../.install" root@"$IP":~/scripts/.install
 
-ssh root@"$IP" 'sudo apt-get update && /root/scripts/commons/secure-folder.sh'
+ssh root@"$IP" 'sudo apt-get update && ~/scripts/commons/secure-folder.sh'

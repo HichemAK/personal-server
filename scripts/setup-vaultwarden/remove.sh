@@ -1,9 +1,9 @@
 #!/bin/bash
 # remove.sh — Remove VaultWarden installation
-# Data at /mnt/storagebox/vw-data is PRESERVED.
+# Data is PRESERVED.
 set -euo pipefail
 
-source /root/scripts/.install
+source ~/scripts/.install
 
 if ! docker ps -a --format '{{.Names}}' | grep -q '^vaultwarden$'; then
     echo "VaultWarden does not appear to be installed (container not found). Nothing to remove."
@@ -21,4 +21,4 @@ echo "✓ Removed nginx config"
 
 systemctl reload nginx 2>/dev/null || true
 
-echo "✓ VaultWarden removed (data at /mnt/storagebox/vw-data is preserved)"
+echo "✓ VaultWarden removed (data is preserved)"

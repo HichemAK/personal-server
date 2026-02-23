@@ -2,7 +2,7 @@
 # setup-mount.sh
 # Provides the mount_drives function. Source this file, then call mount_drives.
 # All mount configuration is read from MOUNT_N_* environment variables
-# (already sourced from /root/scripts/.install by the calling script).
+# (already sourced from ~/scripts/.install by the calling script).
 
 mount_drives() {
     local n=1

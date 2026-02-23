@@ -15,16 +15,16 @@ fi
 case "${ACTION_VAULTWARDEN:-}" in
     uninstall)
         echo "=== Uninstalling VaultWarden ==="
-        ssh root@"$SERVER_IP" 'bash /root/scripts/setup-vaultwarden/remove.sh'
+        ssh root@"$SERVER_IP" 'bash ~/scripts/setup-vaultwarden/remove.sh'
         exit 0
         ;;
     reinstall)
         echo "=== Reinstalling VaultWarden: running remove.sh ==="
-        ssh root@"$SERVER_IP" 'bash /root/scripts/setup-vaultwarden/remove.sh'
+        ssh root@"$SERVER_IP" 'bash ~/scripts/setup-vaultwarden/remove.sh'
         ;;
     install) ;;
     *) echo "Error: ACTION_VAULTWARDEN must be install, uninstall, or reinstall"; exit 1 ;;
 esac
 
 # Launch setup
-ssh -t root@"$SERVER_IP" 'bash /root/scripts/setup-vaultwarden/setup.sh'
+ssh -t root@"$SERVER_IP" 'bash ~/scripts/setup-vaultwarden/setup.sh'

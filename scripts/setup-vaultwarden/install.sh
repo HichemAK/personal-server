@@ -17,7 +17,7 @@ services:
       ADMIN_TOKEN: "$VW_ADMIN_TOKEN"
       SIGNUPS_ALLOWED: false
     volumes:
-      - $HOME/vw-data/:/data/
+      - ${VAULTWARDEN_DATA_DIR:-$HOME/vw-data}:/data/
     ports:
       - 127.0.0.1:8000:80
 EOF
