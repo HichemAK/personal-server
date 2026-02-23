@@ -110,4 +110,4 @@ NEXTCLOUD_EXTERNAL_MOUNTS=
 # ACTION_OMV : install | uninstall | reinstall | (empty to skip)
 # =============================================================================
 
-ACTION_OMV=
+ACTION_OMV= # (UNTESTED - NOT RECOMMENDED)
