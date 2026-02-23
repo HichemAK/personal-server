@@ -22,7 +22,8 @@ ssh-keyscan -H "$IP" >> ~/.ssh/known_hosts
 # Sync scripts to the remote server
 rsync -avz "$SCRIPT_DIR/" root@"$IP":~/scripts
 
-# Sync .install separately (it lives one level above scripts/)
+# Sync .install and .backup (they live one level above scripts/)
 rsync -avz "$SCRIPT_DIR/../.install" root@"$IP":~/scripts/.install
+rsync -avz "$SCRIPT_DIR/../.backup" root@"$IP":~/scripts/.backup
 
 ssh root@"$IP" 'sudo apt-get update && ~/scripts/commons/secure-folder.sh'

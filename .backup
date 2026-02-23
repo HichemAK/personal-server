@@ -1,0 +1,31 @@
+# =============================================================================
+# [VaultWarden]
+#
+# -- Backup sidecar (ttionya/vaultwarden-backup) --
+# Set VW_BACKUP_MOUNT to the index of the mount (defined in .install) that will
+# store the backup archives. Leave empty to disable the backup sidecar entirely.
+#
+# VW_BACKUP_MOUNT        : mount slot index from .install to use as backup storage
+#                          (e.g. 1 → uses MOUNT_1_* credentials; supports sftp, smb, webdav)
+# VW_BACKUP_RCLONE_DIR   : path on the remote where backup archives are stored
+# VW_BACKUP_CRON         : cron schedule for automatic backups
+# VW_BACKUP_ZIP_PASSWORD : password used to encrypt backup archives  ← REQUIRED
+# VW_BACKUP_KEEP_DAYS    : number of days to retain backups (0 = keep all)
+# VW_BACKUP_TZ           : timezone for backup timestamps
+#
+# -- Restore (restore.sh) --
+# VW_RESTORE_BACKUP_FILE : "latest" — pull the most recent archive from the
+#                          configured remote automatically, or an absolute path
+#                          to an archive already present on the server.
+# VW_RESTORE_FORCE       : skip confirmation prompts during restore (true | false)
+# =============================================================================
+
+VW_BACKUP_MOUNT=               # mount index  (empty → backup disabled)
+VW_BACKUP_RCLONE_DIR=backup/vw
+VW_BACKUP_CRON=0 2 * * *       # daily at 02:00
+VW_BACKUP_ZIP_PASSWORD=        # encryption password for archives  ← fill in
+VW_BACKUP_KEEP_DAYS=30
+VW_BACKUP_TZ=UTC
+
+VW_RESTORE_BACKUP_FILE=latest
+VW_RESTORE_FORCE=false

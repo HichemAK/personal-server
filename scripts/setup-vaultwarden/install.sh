@@ -22,4 +22,31 @@ services:
       - 127.0.0.1:8000:80
 EOF
 
+if [ -n "${VW_BACKUP_MOUNT:-}" ] && [ -n "${VW_BACKUP_ZIP_PASSWORD:-}" ]; then
+    sudo tee -a compose.yaml > /dev/null <<EOF
+
+  vaultwarden-backup:
+    image: ttionya/vaultwarden-backup:latest
+    container_name: vaultwarden-backup
+    restart: unless-stopped
+    volumes_from:
+      - vaultwarden
+    volumes:
+      - vaultwarden-rclone-data:/config/
+    environment:
+      DATA_DIR: "/data"
+      RCLONE_REMOTE_NAME: "VaultWardenBackup"
+      RCLONE_REMOTE_DIR: "${VW_BACKUP_RCLONE_DIR:-/VaultWardenBackup/}"
+      CRON: "${VW_BACKUP_CRON:-0 2 * * *}"
+      ZIP_PASSWORD: "${VW_BACKUP_ZIP_PASSWORD}"
+      BACKUP_KEEP_DAYS: "${VW_BACKUP_KEEP_DAYS:-30}"
+      TIMEZONE: "${VW_BACKUP_TZ:-UTC}"
+    depends_on:
+      - vaultwarden
+
+volumes:
+  vaultwarden-rclone-data:
+EOF
+fi
+
 docker compose up -d
