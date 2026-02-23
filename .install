@@ -50,36 +50,43 @@ SERVER_IP=
 # =============================================================================
 
 
+
 # =============================================================================
 # [VaultWarden]
 #
-# REINSTALL_VAULTWARDEN=true will run remove.sh (stops containers, removes
-# nginx config; data at /mnt/storagebox/vw-data is PRESERVED) then reinstall.
+# ACTION_VAULTWARDEN    : install   – install the service; no-op if already installed
+#                         uninstall – uninstall the service; no-op if not installed
+#                         reinstall – uninstall then install (install if not present)
+#                         (empty)   – skip this service entirely
+# VAULTWARDEN_DATA_DIR  : host path for persistent data (bind-mounted into the container)
 # =============================================================================
 
-INSTALL_VAULTWARDEN=false
-REINSTALL_VAULTWARDEN=false
-VAULTWARDEN_FQDN=     # fully qualified domain, e.g. vw.yourdomain.com
+ACTION_VAULTWARDEN=
+VAULTWARDEN_FQDN=          # fully qualified domain, e.g. vw.yourdomain.com
+VAULTWARDEN_DATA_DIR=  # host path for persistent data (empty --> default value)
 
 
 # =============================================================================
 # [Mailcow]
 #
-# REINSTALL_MAILCOW=true will run remove.sh (stops containers, deletes
-# /opt/mailcow-dockerized, removes nginx config) then reinstall.
+# ACTION_MAILCOW   : install | uninstall | reinstall | (empty to skip)
+# MAILCOW_DATA_DIR : MAILDIR_SUB in mailcow.conf — subdirectory within the vmail
+#                    volume where mailboxes are stored (e.g. Maildir)
 # =============================================================================
 
-INSTALL_MAILCOW=false
-REINSTALL_MAILCOW=false
-MAILCOW_FQDN=         # fully qualified domain, e.g. mail.yourdomain.com
-MAILCOW_TZ=           # timezone passed to generate_config.sh, e.g. Europe/Berlin
+ACTION_MAILCOW=
+MAILCOW_FQDN=    # fully qualified domain, e.g. mail.yourdomain.com
+MAILCOW_TZ=              # timezone passed to generate_config.sh, e.g. Europe/Berlin
+MAILCOW_DATA_DIR=             # subdirectory within vmail volume for mailboxes  (empty --> default value)
 
 
 # =============================================================================
 # [Nextcloud]
 #
-# REINSTALL_NEXTCLOUD=true will run remove.sh (stops containers, removes
-# nginx config; data at /mnt/storagebox/nextcloud is PRESERVED) then reinstall.
+# ACTION_NEXTCLOUD   : install | uninstall | reinstall | (empty to skip)
+# NEXTCLOUD_DATA_DIR : host path for Nextcloud's data directory (NEXTCLOUD_DATADIR
+#                      in the AIO compose override)
+#                      ⚠ Do not change after the initial install — data will not migrate.
 #
 # NEXTCLOUD_EXTERNAL_MOUNTS: space-separated list of mount slot numbers
 # (the N in MOUNT_N_USER) to register as Nextcloud external storage.
@@ -91,18 +98,16 @@ MAILCOW_TZ=           # timezone passed to generate_config.sh, e.g. Europe/Berli
 #   NEXTCLOUD_EXTERNAL_MOUNTS="1 2"      # add mounts 1 and 2
 # =============================================================================
 
-INSTALL_NEXTCLOUD=false
-REINSTALL_NEXTCLOUD=false
-NEXTCLOUD_FQDN=       # fully qualified domain, e.g. cloud.yourdomain.com
-NEXTCLOUD_EXTERNAL_MOUNTS=1
+ACTION_NEXTCLOUD=
+NEXTCLOUD_FQDN=                            # fully qualified domain, e.g. cloud.yourdomain.com
+NEXTCLOUD_DATA_DIR=  # host path for Nextcloud's data directory (empty --> default value)
+NEXTCLOUD_EXTERNAL_MOUNTS=
 
 
 # =============================================================================
 # [OpenMediaVault]
 #
-# REINSTALL_OMV=true will run remove.sh (purges OMV packages, removes apt
-# sources) then reinstall.
+# ACTION_OMV : install | uninstall | reinstall | (empty to skip)
 # =============================================================================
 
-INSTALL_OMV=false
-REINSTALL_OMV=false
+ACTION_OMV=
