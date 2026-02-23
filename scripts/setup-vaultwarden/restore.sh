@@ -16,9 +16,14 @@ if [ -z "${VW_RESTORE_BACKUP_FILE:-}" ]; then
     exit 1
 fi
 
+# Stop VaultWarden (keep containers — they hold the bind-mount path)
+cd ~/scripts
+docker compose stop vaultwarden vaultwarden-backup 2>/dev/null || docker compose stop vaultwarden
+echo "✓ Stopped VaultWarden"
+
 DATA_DIR="${VAULTWARDEN_DATA_DIR:-$HOME/vw-data}"
 REMOTE_NAME="VaultWardenBackup"
-RCLONE_DIR="${VW_BACKUP_RCLONE_DIR:-/VaultWardenBackup/}"
+RCLONE_DIR="${VW_BACKUP_RCLONE_DIR:-/VaultWardenBackup}"
 
 echo "=== Restoring VaultWarden ==="
 
@@ -41,33 +46,35 @@ if [ "${VW_RESTORE_BACKUP_FILE}" = "latest" ]; then
         --mount type=volume,source=vaultwarden-rclone-data,target=/config/ \
         --mount type=bind,source="${RESTORE_TMPDIR}",target=/restore/ \
         ttionya/vaultwarden-backup:latest \
-        rclone copy "${REMOTE_NAME}:${RCLONE_DIR}${LATEST}" /restore/
+        rclone copy "${REMOTE_NAME}:${RCLONE_DIR}/${LATEST}" /restore/
+    BACKUP_FILENAME="${LATEST}"
 else
     if [ ! -f "${VW_RESTORE_BACKUP_FILE}" ]; then
         echo "Error: Backup file '${VW_RESTORE_BACKUP_FILE}' not found on this host."
         exit 1
     fi
     cp "${VW_RESTORE_BACKUP_FILE}" "${RESTORE_TMPDIR}/"
+    BACKUP_FILENAME="$(basename "${VW_RESTORE_BACKUP_FILE}")"
 fi
 
-# Stop VaultWarden (keep containers — they hold the bind-mount path)
-cd ~/scripts
-docker compose stop vaultwarden vaultwarden-backup 2>/dev/null || docker compose stop vaultwarden
-echo "✓ Stopped VaultWarden"
+# Confirm before overwriting data (unless force mode)
+if [ "${VW_RESTORE_FORCE:-false}" != "true" ]; then
+    echo "WARNING: This will overwrite all VaultWarden data. Type 'yes' to confirm:"
+    read -r CONFIRM
+    if [ "${CONFIRM}" != "yes" ]; then
+        echo "Aborted."
+        exit 0
+    fi
+fi
 
-# Build restore flags
-RESTORE_FLAGS="--password ${VW_BACKUP_ZIP_PASSWORD}"
-[ "${VW_RESTORE_FORCE:-false}" = "true" ] && RESTORE_FLAGS="${RESTORE_FLAGS} --force-restore"
-INTERACTIVE="-it"
-[ "${VW_RESTORE_FORCE:-false}" = "true" ] && INTERACTIVE=""
-
-# shellcheck disable=SC2086
-docker run --rm ${INTERACTIVE} \
-    --mount type=bind,source="${DATA_DIR}",target=/bitwarden/data/ \
+docker run --rm \
+    --mount type=bind,source="${DATA_DIR}",target=/data/ \
     --mount type=bind,source="${RESTORE_TMPDIR}",target=/bitwarden/restore/ \
+    -e DATA_DIR="/data" \
     ttionya/vaultwarden-backup:latest \
-    restore ${RESTORE_FLAGS}
-
+    restore --zip-file "/bitwarden/restore/${BACKUP_FILENAME}" \
+            --password "${VW_BACKUP_ZIP_PASSWORD}" --force-restore
+rm -f "${VAULTWARDEN_DATA_DIR}/db.sqlite3-wal" "${VAULTWARDEN_DATA_DIR}/db.sqlite3-shm"
 echo "✓ VaultWarden restored"
 
 # Restart

@@ -36,7 +36,7 @@ if [ -n "${VW_BACKUP_MOUNT:-}" ] && [ -n "${VW_BACKUP_ZIP_PASSWORD:-}" ]; then
     environment:
       DATA_DIR: "/data"
       RCLONE_REMOTE_NAME: "VaultWardenBackup"
-      RCLONE_REMOTE_DIR: "${VW_BACKUP_RCLONE_DIR:-/VaultWardenBackup/}"
+      RCLONE_REMOTE_DIR: "${VW_BACKUP_RCLONE_DIR:-/VaultWardenBackup}"
       CRON: "${VW_BACKUP_CRON:-0 2 * * *}"
       ZIP_PASSWORD: "${VW_BACKUP_ZIP_PASSWORD}"
       BACKUP_KEEP_DAYS: "${VW_BACKUP_KEEP_DAYS:-30}"
@@ -46,7 +46,10 @@ if [ -n "${VW_BACKUP_MOUNT:-}" ] && [ -n "${VW_BACKUP_ZIP_PASSWORD:-}" ]; then
 
 volumes:
   vaultwarden-rclone-data:
+    external: true
+    name: vaultwarden-rclone-data
 EOF
+    docker volume create vaultwarden-rclone-data 2>/dev/null || true
 fi
 
 docker compose up -d

@@ -12,9 +12,17 @@ fi
 
 echo "=== Removing VaultWarden ==="
 
+docker stop vaultwarden-backup 2>/dev/null || true
+docker rm vaultwarden-backup 2>/dev/null || true
 docker stop vaultwarden 2>/dev/null || true
 docker rm vaultwarden 2>/dev/null || true
-echo "✓ Removed vaultwarden container"
+echo "✓ Removed containers"
+
+docker volume rm vaultwarden-rclone-data 2>/dev/null || true
+echo "✓ Removed rclone config volume"
+
+rm -f ~/scripts/compose.yaml
+echo "✓ Removed compose.yaml"
 
 rm -f /etc/nginx/conf.d/vaultwarden.conf
 echo "✓ Removed nginx config"

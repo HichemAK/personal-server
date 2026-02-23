@@ -21,11 +21,11 @@
 # =============================================================================
 
 VW_BACKUP_MOUNT=               # mount index  (empty → backup disabled)
-VW_BACKUP_RCLONE_DIR=backup/vw
-VW_BACKUP_CRON=0 2 * * *       # daily at 02:00
-VW_BACKUP_ZIP_PASSWORD=        # encryption password for archives  ← fill in
+VW_BACKUP_RCLONE_DIR=backups/vw
+VW_BACKUP_CRON="* 2 * * *"       # daily at 02:00
+VW_BACKUP_ZIP_PASSWORD="TSw4Twg0Wk6EF0suSo19apJPk3M3mBQe"        # encryption password for archives  ← fill in
 VW_BACKUP_KEEP_DAYS=30
-VW_BACKUP_TZ=UTC
+VW_BACKUP_TZ=Europe/Paris
 
 VW_RESTORE_BACKUP_FILE=latest
 VW_RESTORE_FORCE=false
