@@ -1,6 +1,6 @@
 # Personal Server Setup
 
-Automated setup tool for services on a self-hosted VM. Configures services (VaultWarden, Mailcow, Nextcloud) over SSH from your local machine with a single command.
+Deploy services (VaultWarden, Mailcow, Nextcloud) over SSH from your local machine with a single command.
 
 ## Prerequisites
 
