@@ -11,16 +11,6 @@ if [ -z "${VW_BACKUP_ZIP_PASSWORD:-}" ]; then
     exit 1
 fi
 
-if [ -z "${VW_RESTORE_BACKUP_FILE:-}" ]; then
-    echo "Error: VW_RESTORE_BACKUP_FILE is not set in .backup"
-    exit 1
-fi
-
-# Stop VaultWarden (keep containers — they hold the bind-mount path)
-cd ~/scripts
-docker compose stop vaultwarden vaultwarden-backup 2>/dev/null || docker compose stop vaultwarden
-echo "✓ Stopped VaultWarden"
-
 DATA_DIR="${VAULTWARDEN_DATA_DIR:-$HOME/vw-data}"
 REMOTE_NAME="VaultWardenBackup"
 RCLONE_DIR="${VW_BACKUP_RCLONE_DIR:-/VaultWardenBackup}"
@@ -30,42 +20,44 @@ echo "=== Restoring VaultWarden ==="
 RESTORE_TMPDIR="$(mktemp -d)"
 trap "rm -rf '${RESTORE_TMPDIR}'" EXIT
 
-if [ "${VW_RESTORE_BACKUP_FILE}" = "latest" ]; then
-    echo "Fetching latest backup from '${REMOTE_NAME}:${RCLONE_DIR}'..."
-    LATEST="$(docker run --rm \
-        --mount type=volume,source=vaultwarden-rclone-data,target=/config/ \
-        ttionya/vaultwarden-backup:latest \
-        rclone lsf --order-by modtime,desc \
-        "${REMOTE_NAME}:${RCLONE_DIR}" | head -1)"
-    if [ -z "$LATEST" ]; then
-        echo "Error: No backup files found on '${REMOTE_NAME}:${RCLONE_DIR}'."
-        exit 1
-    fi
-    echo "Downloading ${LATEST}..."
-    docker run --rm \
-        --mount type=volume,source=vaultwarden-rclone-data,target=/config/ \
-        --mount type=bind,source="${RESTORE_TMPDIR}",target=/restore/ \
-        ttionya/vaultwarden-backup:latest \
-        rclone copy "${REMOTE_NAME}:${RCLONE_DIR}/${LATEST}" /restore/
-    BACKUP_FILENAME="${LATEST}"
-else
-    if [ ! -f "${VW_RESTORE_BACKUP_FILE}" ]; then
-        echo "Error: Backup file '${VW_RESTORE_BACKUP_FILE}' not found on this host."
-        exit 1
-    fi
-    cp "${VW_RESTORE_BACKUP_FILE}" "${RESTORE_TMPDIR}/"
-    BACKUP_FILENAME="$(basename "${VW_RESTORE_BACKUP_FILE}")"
+# List all backups and let the user pick one
+echo "Fetching available backups from '${REMOTE_NAME}:${RCLONE_DIR}'..."
+mapfile -t BACKUPS < <(docker run --rm \
+    --mount type=volume,source=vaultwarden-rclone-data,target=/config/ \
+    ttionya/vaultwarden-backup:latest \
+    rclone lsf --order-by modtime,desc \
+    "${REMOTE_NAME}:${RCLONE_DIR}")
+
+if [ ${#BACKUPS[@]} -eq 0 ]; then
+    echo "Error: No backup files found on '${REMOTE_NAME}:${RCLONE_DIR}'."
+    exit 1
 fi
 
-# Confirm before overwriting data (unless force mode)
-if [ "${VW_RESTORE_FORCE:-false}" != "true" ]; then
-    echo "WARNING: This will overwrite all VaultWarden data. Type 'yes' to confirm:"
-    read -r CONFIRM
-    if [ "${CONFIRM}" != "yes" ]; then
-        echo "Aborted."
-        exit 0
-    fi
+echo ""
+for i in "${!BACKUPS[@]}"; do
+    echo "  [$((i+1))] ${BACKUPS[$i]}"
+done
+echo ""
+echo "Select a backup to restore [1-${#BACKUPS[@]}]:"
+read -r SELECTION
+
+if ! [[ "$SELECTION" =~ ^[0-9]+$ ]] || [ "$SELECTION" -lt 1 ] || [ "$SELECTION" -gt "${#BACKUPS[@]}" ]; then
+    echo "Invalid selection. Aborted."
+    exit 1
 fi
+
+BACKUP_FILENAME="${BACKUPS[$((SELECTION-1))]}"
+echo "Downloading ${BACKUP_FILENAME}..."
+docker run --rm \
+    --mount type=volume,source=vaultwarden-rclone-data,target=/config/ \
+    --mount type=bind,source="${RESTORE_TMPDIR}",target=/restore/ \
+    ttionya/vaultwarden-backup:latest \
+    rclone copy "${REMOTE_NAME}:${RCLONE_DIR}/${BACKUP_FILENAME}" /restore/
+
+# Stop VaultWarden (keep containers — they hold the bind-mount path)
+cd ~/scripts
+docker compose stop vaultwarden vaultwarden-backup 2>/dev/null || docker compose stop vaultwarden
+echo "✓ Stopped VaultWarden"
 
 docker run --rm \
     --mount type=bind,source="${DATA_DIR}",target=/data/ \

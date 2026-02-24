@@ -1,6 +1,5 @@
 #!/bin/bash
 # remove.sh — Remove VaultWarden installation
-# Data is PRESERVED.
 set -euo pipefail
 
 source ~/scripts/.install
@@ -24,9 +23,14 @@ echo "✓ Removed rclone config volume"
 rm -f ~/scripts/compose.yaml
 echo "✓ Removed compose.yaml"
 
+rm -rf $VAULTWARDEN_DATA_DIR
+echo "✓ Removed vault warden data"
+
+
 rm -f /etc/nginx/conf.d/vaultwarden.conf
 echo "✓ Removed nginx config"
 
+
 systemctl reload nginx 2>/dev/null || true
 
-echo "✓ VaultWarden removed (data is preserved)"
+echo "✓ VaultWarden removed"
