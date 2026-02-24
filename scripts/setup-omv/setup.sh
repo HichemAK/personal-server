@@ -1,9 +1,12 @@
+#!/bin/bash
 # Setup Script
-
-set -euo pipefail  # Exit on error, undefined variables
+set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/.."
-cd $SCRIPT_DIR
+cd "$SCRIPT_DIR"
+
+# Load configuration
+source ~/scripts/.install
 
 # Install packages
 sudo apt-get update
@@ -16,8 +19,5 @@ sudo ufw --force enable
 echo "✓ Firewall enabled - only SSH accessible"
 echo ""
 
-# Setup mount
-source ./commons/setup-mount.sh
-
-# Setup openvaultmedia
+# Setup openmediavault
 ./setup-omv/install-omv.sh
