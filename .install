@@ -62,8 +62,8 @@ SERVER_IP=
 # =============================================================================
 
 ACTION_VAULTWARDEN=
-VAULTWARDEN_FQDN=          # fully qualified domain, e.g. vw.yourdomain.com
-VAULTWARDEN_DATA_DIR=  # host path for persistent data (empty --> default value)
+VAULTWARDEN_FQDN=         # fully qualified domain, e.g. vw.yourdomain.com
+VAULTWARDEN_DATA_DIR=/data/vw  # host path for persistent data (empty --> default value)
 
 
 # =============================================================================

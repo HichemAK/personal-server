@@ -20,15 +20,12 @@
 # VW_RESTORE_FORCE       : skip confirmation prompts during restore (true | false)
 # =============================================================================
 
-VW_BACKUP_MOUNT=               # mount index  (empty → backup disabled)
+VW_BACKUP_MOUNT=1               # mount index  (empty → backup disabled)
 VW_BACKUP_RCLONE_DIR=backups/vaultwarden
-VW_BACKUP_CRON="* 2 * * *"       # daily at 02:00
+VW_BACKUP_CRON="0 2 * * *"       # daily at 02:00
 VW_BACKUP_ZIP_PASSWORD="TSw4Twg0Wk6EF0suSo19apJPk3M3mBQe"        # encryption password for archives  ← fill in
 VW_BACKUP_KEEP_DAYS=30
 VW_BACKUP_TZ=Europe/Paris
-
-VW_RESTORE_BACKUP_FILE=latest
-VW_RESTORE_FORCE=false
 
 # =============================================================================
 # [Mailcow]
@@ -43,10 +40,7 @@ VW_RESTORE_FORCE=false
 # MC_RESTORE_FORCE       : skip confirmation prompt (true | false)
 # =============================================================================
 
-MC_BACKUP_MOUNT=               # mount index (empty → backup disabled)
+MC_BACKUP_MOUNT=1               # mount index (empty → backup disabled)
 MC_BACKUP_SUBDIR=backups/mailcow
-MC_BACKUP_CRON="0 3 * * *"     # daily at 03:00
-MC_BACKUP_KEEP_DAYS=7
-
-MC_RESTORE_BACKUP_DATE=latest
-MC_RESTORE_FORCE=false
+MC_BACKUP_CRON="0 3 * * *"   # Every 03:00
+MC_BACKUP_KEEP_DAYS=10
