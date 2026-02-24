@@ -74,11 +74,10 @@ cd "$SCRIPT_DIR"
 source ./setup-mailcow/config-nginx.sh
 sudo systemctl reload nginx
 
-echo ""
-echo "================================================================"
-echo "  WARNING: Save these Mailcow admin credentials now."
-echo "  They will not be shown again."
-echo "  Admin panel: https://${MAILCOW_FQDN}/admin"
-echo "================================================================"
-echo "${ADMIN_CREDENTIALS}"
-echo "================================================================"
+CREDS_FILE=/root/.credentials-mailcow
+{
+    echo "============ Mailcow ============"
+    echo "Admin URL : https://${MAILCOW_FQDN}/admin"
+    echo "${ADMIN_CREDENTIALS}"
+} > "${CREDS_FILE}"
+chmod 600 "${CREDS_FILE}"

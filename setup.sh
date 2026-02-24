@@ -49,3 +49,27 @@ if [ "$_installed" = "false" ]; then
     echo "Set ACTION_VAULTWARDEN, ACTION_MAILCOW, ACTION_NEXTCLOUD,"
     echo "or ACTION_OMV to install, uninstall, or reinstall in .install."
 fi
+
+# Display and clean up credentials from all installed services
+echo ""
+ssh root@"$SERVER_IP" '
+    found=false
+    for f in /root/.credentials-*; do
+        [ -f "$f" ] || continue
+        found=true
+        break
+    done
+    if [ "$found" = "true" ]; then
+        echo "================================================================"
+        echo "  SETUP COMPLETE — Save these credentials now."
+        echo "  They will not be shown again."
+        echo "================================================================"
+        for f in /root/.credentials-*; do
+            [ -f "$f" ] || continue
+            cat "$f"
+            echo ""
+        done
+        echo "================================================================"
+        shred -uz /root/.credentials-* || true
+    fi
+'

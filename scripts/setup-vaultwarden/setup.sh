@@ -20,5 +20,10 @@ fi
 source ./setup-vaultwarden/config-nginx.sh
 sudo systemctl reload nginx
 
-echo "Visit https://$VAULTWARDEN_FQDN/admin and configure VaultWarden."
-echo "The admin token is '$VW_ADMIN_TOKEN' (DON'T FORGET TO STORE IT SOMEWHERE)."
+CREDS_FILE=/root/.credentials-vaultwarden
+{
+    echo "============ VaultWarden ============"
+    echo "  Admin URL   : https://${VAULTWARDEN_FQDN}/admin"
+    echo "  Admin token : ${VW_ADMIN_TOKEN}"
+} > "${CREDS_FILE}"
+chmod 600 "${CREDS_FILE}"

@@ -52,4 +52,5 @@ EOF
     docker volume create vaultwarden-rclone-data 2>/dev/null || true
 fi
 
+docker compose pull
 docker compose up -d
