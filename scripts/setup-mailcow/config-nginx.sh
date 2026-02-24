@@ -4,13 +4,11 @@ set -euo pipefail
 
 echo "=== Nginx Configuration for MailCow ==="
 echo ""
-echo -n "Enter the domain you use for MailCow (format: domain.com): "
-read DOMAIN
 
-MAILCOW_HOSTNAME=mail.${DOMAIN}
-MAILCOW_PATH=/opt/mailcow-dockerized
+MAILCOW_HOSTNAME="${MAILCOW_FQDN}"
 
-certbot certonly -d $MAILCOW_HOSTNAME
+sudo rm -f /etc/nginx/conf.d/mailcow.conf
+sudo certbot certonly -d $MAILCOW_HOSTNAME --nginx --non-interactive --agree-tos --keep-until-expiring
 
 sudo tee /etc/nginx/conf.d/mailcow.conf > /dev/null <<EOF
 server {
