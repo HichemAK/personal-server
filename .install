@@ -32,6 +32,11 @@ SERVER_IP=
 # MOUNT_N_PASS    : Password for authentication
 # MOUNT_N_PORT    : [SFTP only, optional] Port to use. Defaults to 22.
 #                   Hetzner Storage Boxes use port 23 — set explicitly.
+# MOUNT_N_COPY_SSH_KEY : [SFTP only, optional] Set to "true" to copy the server's
+#                        SSH public key to the remote, enabling passwordless SSH access
+#                        (e.g. for rclone via ssh://user@host:port/path).
+#                        An ed25519 keypair is generated at /root/.ssh/id_ed25519 if
+#                        one does not already exist. Requires sshpass (auto-installed).
 #
 # Example (Hetzner Storage Box over SFTP):
 #   MOUNT_1_TYPE=sftp
@@ -48,7 +53,6 @@ SERVER_IP=
 #   MOUNT_2_POINT=/mnt/backup
 #   MOUNT_2_PASS=anotherpassword
 # =============================================================================
-
 
 
 # =============================================================================
@@ -70,14 +74,11 @@ VAULTWARDEN_DATA_DIR=/data/vw  # host path for persistent data (empty --> defaul
 # [Mailcow]
 #
 # ACTION_MAILCOW   : install | uninstall | reinstall | (empty to skip)
-# MAILCOW_DATA_DIR : MAILDIR_SUB in mailcow.conf — subdirectory within the vmail
-#                    volume where mailboxes are stored (e.g. Maildir)
 # =============================================================================
 
 ACTION_MAILCOW=
 MAILCOW_FQDN=    # fully qualified domain, e.g. mail.yourdomain.com
 MAILCOW_TZ=              # timezone passed to generate_config.sh, e.g. Europe/Berlin
-MAILCOW_DATA_DIR=             # subdirectory within vmail volume for mailboxes  (empty --> default value)
 
 
 # =============================================================================
@@ -99,7 +100,7 @@ MAILCOW_DATA_DIR=             # subdirectory within vmail volume for mailboxes  
 # =============================================================================
 
 ACTION_NEXTCLOUD=
-NEXTCLOUD_FQDN=                            # fully qualified domain, e.g. cloud.yourdomain.com
+NEXTCLOUD_FQDN=      # fully qualified domain, e.g. cloud.yourdomain.com
 NEXTCLOUD_DATA_DIR=  # host path for Nextcloud's data directory (empty --> default value)
 NEXTCLOUD_EXTERNAL_MOUNTS=
 

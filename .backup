@@ -44,3 +44,14 @@ MC_BACKUP_MOUNT=1               # mount index (empty → backup disabled)
 MC_BACKUP_SUBDIR=backups/mailcow
 MC_BACKUP_CRON="0 3 * * *"   # Every 03:00
 MC_BACKUP_KEEP_DAYS=10
+
+# =============================================================================
+# [Nextcloud]
+#
+# NC_BORG_RETENTION_POLICY : Borg retention policy flags injected into
+#                            BORG_RETENTION_POLICY in override.yaml at install time.
+#                            Leave empty to keep the value already set in override.yaml.
+#                            See https://github.com/nextcloud/all-in-one#how-to-adjust-borgs-retention-policy
+# =============================================================================
+
+NC_BORG_RETENTION_POLICY="--keep-within=7d --keep-weekly=4 --keep-monthly=6"
