@@ -1,6 +1,6 @@
-# PrivateServer Setup
+# Personal Server Setup
 
-Automated provisioning tool for a self-hosted VM. Configures services (VaultWarden, Mailcow, Nextcloud) over SSH from your local machine with a single command.
+Automated setup tool for services on a self-hosted VM. Configures services (VaultWarden, Mailcow, Nextcloud) over SSH from your local machine with a single command.
 
 ## Prerequisites
 
