@@ -19,7 +19,7 @@ Automated setup tool for services on a self-hosted VM. Configures services (Vaul
 
 Credentials for installed services are displayed once at the end of the run. Save them — they will not be shown again.
 
-## Services
+## Actions
 
 Each service is controlled by an `ACTION_<SERVICE>` variable in `.install`:
 
