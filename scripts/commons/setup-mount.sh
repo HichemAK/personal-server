@@ -72,6 +72,23 @@ mount_drives() {
                     "${MOUNT_USER}@${MOUNT_ADDRESS}:/home" "$MOUNT_POINT" \
                     -o port="$SSH_PORT",password_stdin,StrictHostKeyChecking=no,allow_other,default_permissions
                 echo "✓ SFTP mounted at $MOUNT_POINT (port $SSH_PORT)"
+
+                local copy_key_var="MOUNT_${n}_COPY_SSH_KEY"
+                if [ "${!copy_key_var:-}" = "true" ]; then
+                    echo "--- Copying SSH key to remote (passwordless access) ---"
+                    sudo apt-get install -y sshpass
+                    if [ ! -f /root/.ssh/id_ed25519 ]; then
+                        ssh-keygen -t ed25519 -N "" -f /root/.ssh/id_ed25519
+                        echo "✓ Generated new SSH keypair at /root/.ssh/id_ed25519"
+                    fi
+                    sshpass -p "$MOUNT_PASS" ssh-copy-id \
+                        -i /root/.ssh/id_ed25519.pub \
+                        -p "$SSH_PORT" \
+                        -s \
+                        -o StrictHostKeyChecking=no \
+                        "${MOUNT_USER}@${MOUNT_ADDRESS}"
+                    echo "✓ SSH key registered on remote — passwordless access enabled for ${MOUNT_USER}@${MOUNT_ADDRESS}:${SSH_PORT}"
+                fi
                 ;;
 
             smb)
