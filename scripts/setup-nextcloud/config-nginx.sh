@@ -4,8 +4,13 @@ set -euo pipefail
 
 echo "=== Nginx Configuration for Nextcloud ==="
 echo ""
-echo -n "Enter the FQDN for Nextcloud (e.g., cloud.yourdomain.com): "
-read NC_FQDN
+
+sudo rm -f /etc/nginx/conf.d/nextcloud.conf
+
+# Use NEXTCLOUD_FQDN from .install (already sourced by setup.sh)
+NC_FQDN="${NEXTCLOUD_FQDN}"
+sudo certbot certonly -d ${NC_FQDN} --nginx --non-interactive --agree-tos --keep-until-expiring
+
 
 curl -L https://ssl-config.mozilla.org/ffdhe2048.txt -o /etc/dhparam
 
@@ -88,8 +93,6 @@ server {
     ssl_ciphers TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-RSA-AES128-GCM-SHA256;
 }
 EOF
-
-certbot certonly -d ${NC_FQDN}
 sudo nginx -t
 # sudo systemctl reload nginx
 echo "✓ Nginx configured for Nextcloud at http://${NC_FQDN}"

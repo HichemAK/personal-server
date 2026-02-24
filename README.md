@@ -55,3 +55,19 @@ bash ~/scripts/setup-mailcow/restore.sh
 ```
 
 The script fetches the list of available backups from the configured remote, lets you pick one, and restores it.
+
+
+
+## Notes per service
+
+### Nextcloud
+
+To access admin page, use SSH tunneling. Execute this command:
+
+```bash
+ssh -L 9909:localhost:8080 root@IP
+```
+
+And then visit https://127.0.0.1:9909. 
+
+There you can **enable backup** by providing a Borg remote storage. This is unfortunately not automatable at the moment and you need to look for the official documentation at https://github.com/nextcloud/all-in-one?tab=readme-ov-file#backup
