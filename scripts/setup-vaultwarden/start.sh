@@ -22,7 +22,12 @@ case "${ACTION_VAULTWARDEN:-}" in
         echo "=== Reinstalling VaultWarden: running remove.sh ==="
         ssh root@"$SERVER_IP" 'bash ~/scripts/setup-vaultwarden/remove.sh'
         ;;
-    install) ;;
+    install)
+        if ssh root@"$SERVER_IP" 'docker ps -a --format "{{.Names}}" | grep -q "^vaultwarden$"'; then
+            echo "VaultWarden is already installed. Skipping."
+            exit 0
+        fi
+        ;;
     *) echo "Error: ACTION_VAULTWARDEN must be install, uninstall, or reinstall"; exit 1 ;;
 esac
 
