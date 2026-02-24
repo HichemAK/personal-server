@@ -38,6 +38,8 @@ sed -i 's/^HTTPS_BIND=.*/HTTPS_BIND=127.0.0.1/' mailcow.conf
 sed -i 's/^HTTPS_PORT=.*/HTTPS_PORT=8443/' mailcow.conf
 sed -i 's/^HTTP_REDIRECT=.*/HTTP_REDIRECT=n/' mailcow.conf
 sed -i 's/^DOCKER_COMPOSE_VERSION=.*/DOCKER_COMPOSE_VERSION=native/' mailcow.conf
+sed -i 's/^SKIP_CLAMD=.*/SKIP_CLAMD=y/' mailcow.conf
+
 # if [ -n "${MAILCOW_DATA_DIR:-}" ]; then
 #     sed -i "s|^MAILDIR_SUB=.*|MAILDIR_SUB=${MAILCOW_DATA_DIR}|" mailcow.conf
 # fi
