@@ -29,3 +29,24 @@ VW_BACKUP_TZ=Europe/Paris
 
 VW_RESTORE_BACKUP_FILE=latest
 VW_RESTORE_FORCE=false
+
+# =============================================================================
+# [Mailcow]
+#
+# MC_BACKUP_MOUNT    : mount slot index from .install whose MOUNT_N_POINT will
+#                      be used as the backup root (empty → backup disabled)
+# MC_BACKUP_SUBDIR   : subdirectory within the mount for mailcow backups
+# MC_BACKUP_CRON     : cron schedule for automatic backups
+# MC_BACKUP_KEEP_DAYS: days to retain backups (passed to --delete-days)
+#
+# MC_RESTORE_BACKUP_DATE : "latest" or a specific name (mailcow_YYYYMMDD_HH)
+# MC_RESTORE_FORCE       : skip confirmation prompt (true | false)
+# =============================================================================
+
+MC_BACKUP_MOUNT=               # mount index (empty → backup disabled)
+MC_BACKUP_SUBDIR=backups/mailcow
+MC_BACKUP_CRON="0 3 * * *"     # daily at 03:00
+MC_BACKUP_KEEP_DAYS=7
+
+MC_RESTORE_BACKUP_DATE=latest
+MC_RESTORE_FORCE=false
