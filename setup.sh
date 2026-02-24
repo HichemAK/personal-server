@@ -19,7 +19,7 @@ bash "$SCRIPT_DIR/scripts/commons/init-server.sh"
 
 # Mount drives once on the server before any service setup
 echo "=== Mounting drives ==="
-ssh root@"$SERVER_IP" 'bash /root/scripts/commons/run-mount.sh'
+ssh root@"$SERVER_IP" '~/scripts/commons/run-mount.sh && ~/scripts/commons/swap.sh 4096 /swapfile'
 
 # Install selected services in order
 _installed=false
