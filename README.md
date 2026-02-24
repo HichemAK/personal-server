@@ -5,7 +5,7 @@ Automated setup tool for services on a self-hosted VM. Configures services (Vaul
 ## Prerequisites
 
 - A Debian-based VM accessible as `root` over SSH
-- Local commands: `bash`, `ssh`, `rsync`
+- Local commands: `ssh`, `rsync`
 - DNS records pointing each service's domain to the server — refer to the official documentation of each service for the required records
 
 ## Quick Start
@@ -14,7 +14,7 @@ Automated setup tool for services on a self-hosted VM. Configures services (Vaul
 2. Fill in `.backup` with your backup schedule and remote storage credentials. All options are documented inside the file.
 3. Run the setup:
    ```bash
-   bash setup.sh
+   ./setup.sh
    ```
 
 Credentials for installed services are displayed once at the end of the run. Save them — they will not be shown again.
