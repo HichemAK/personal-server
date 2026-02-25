@@ -11,7 +11,7 @@ if [ ! -f "$SCRIPT_DIR/.install" ]; then
 fi
 source "$SCRIPT_DIR/.install"
 
-echo "=== Hetzner Server Setup ==="
+echo "====== Server Setup ======"
 echo ""
 
 # Sync scripts and config to the remote server
