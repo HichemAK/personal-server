@@ -55,3 +55,17 @@ MC_BACKUP_KEEP_DAYS=10
 # =============================================================================
 
 NC_BORG_RETENTION_POLICY="--keep-within=7d --keep-weekly=4 --keep-monthly=6"
+
+# =============================================================================
+# [Chhoto URL]
+#
+# CU_BACKUP_MOUNT    : mount slot index from .install (empty → backup disabled)
+# CU_BACKUP_SUBDIR   : path within the mount for SQLite dumps
+# CU_BACKUP_CRON     : cron schedule for automatic backups
+# CU_BACKUP_KEEP_DAYS: days to retain backup files
+# =============================================================================
+
+CU_BACKUP_MOUNT=
+CU_BACKUP_SUBDIR=backups/chhoto
+CU_BACKUP_CRON="10 1 * * *"    # daily at 01:10
+CU_BACKUP_KEEP_DAYS=10

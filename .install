@@ -105,6 +105,19 @@ NEXTCLOUD_EXTERNAL_MOUNTS=
 
 
 # =============================================================================
+# [Chhoto URL]
+#
+# ACTION_CHHOTO      : install | uninstall | reinstall | (empty to skip)
+# CHHOTO_FQDN        : short-link domain, e.g. s.yourdomain.com
+# CHHOTO_SLUG_STYLE  : "Pair" (adjective-name) or "UID" (random string)
+# =============================================================================
+
+ACTION_CHHOTO=
+CHHOTO_FQDN=lsh.XXXX.XX
+CHHOTO_SLUG_STYLE=Pair
+
+
+# =============================================================================
 # [OpenMediaVault]
 #
 # ACTION_OMV : install | uninstall | reinstall | (empty to skip)
