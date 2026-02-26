@@ -4,8 +4,7 @@
 # Immediately after filling in your values, run:
 #   chmod 600 .install
 #
-# NEVER commit this file to version control. It is listed in .gitignore,
-# but double-check before any `git add` operation.
+# NEVER commit your credentials to version control.
 # =============================================================================
 
 # =============================================================================
