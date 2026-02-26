@@ -30,9 +30,13 @@ rsync -avz "$SCRIPT_DIR/../.backup" root@"$IP":~/scripts/.backup
 
 ssh root@"$IP" 'sudo apt-get update && ~/scripts/commons/secure-folder.sh'
 
-# Configure unattended upgrades (security + all regular updates, no auto-reboot)
-echo "=== Configuring unattended upgrades ==="
-ssh root@"$IP" bash <<'REMOTE'
+# Configure unattended upgrades on first init only
+if ! ssh root@"$IP" '[ -f /etc/apt/apt.conf.d/.unattended-upgrades-configured ]'; then
+    echo "=== Configuring unattended upgrades ==="
+    ssh root@"$IP" bash <<'REMOTE'
+# Apply all pending updates immediately
+apt-get upgrade -y
+
 apt-get install -y unattended-upgrades
 
 cat > /etc/apt/apt.conf.d/20auto-upgrades <<'EOF'
@@ -53,5 +57,9 @@ Unattended-Upgrade::Automatic-Reboot "false";
 EOF
 
 systemctl enable --now unattended-upgrades
+touch /etc/apt/apt.conf.d/.unattended-upgrades-configured
 REMOTE
-echo "✓ Unattended upgrades configured (daily, no auto-reboot)"
+    echo "✓ Unattended upgrades configured (daily, no auto-reboot)"
+else
+    echo "✓ Unattended upgrades already configured, skipping"
+fi
