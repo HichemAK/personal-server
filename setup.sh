@@ -39,6 +39,11 @@ if [ -n "${ACTION_NEXTCLOUD:-}" ]; then
     "$SCRIPT_DIR/scripts/setup-nextcloud/start.sh"
 fi
 
+if [ -n "${ACTION_CHHOTO:-}" ]; then
+    _installed=true
+    "$SCRIPT_DIR/scripts/setup-chhoto/start.sh"
+fi
+
 if [ -n "${ACTION_OMV:-}" ]; then
     _installed=true
     "$SCRIPT_DIR/scripts/setup-omv/start.sh"
@@ -47,7 +52,7 @@ fi
 if [ "$_installed" = "false" ]; then
     echo "No services selected."
     echo "Set ACTION_VAULTWARDEN, ACTION_MAILCOW, ACTION_NEXTCLOUD,"
-    echo "or ACTION_OMV to install, uninstall, or reinstall in .install."
+    echo "ACTION_CHHOTO, or ACTION_OMV to install, uninstall, or reinstall in .install."
 fi
 
 # Display and clean up credentials from all installed services
