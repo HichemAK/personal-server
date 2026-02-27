@@ -13,7 +13,7 @@ Deploy self-hosted services over SSH from your local machine with a single comma
 
 ## Prerequisites
 
-- A Debian-based VM accessible as `root` over SSH (passwordless)
+- A Debian-based VM accessible as `root` over SSH (both password and passwordless are required)
 - Local commands: `ssh`, `rsync`
 - DNS records pointing each service's domain to the server — refer to the official documentation of each service for the required records
 
@@ -80,3 +80,12 @@ ssh -L 9909:localhost:8080 root@IP
 And then visit https://127.0.0.1:9909. 
 
 There you can **enable backup** by providing a Borg remote storage. This is unfortunately not automatable at the moment and you need to look for the official documentation at https://github.com/nextcloud/all-in-one?tab=readme-ov-file#backup
+
+
+### Security
+
+Fail2ban + Cockpit is automatically setuped in addition to automatic security updates. Look in `.security` for more information. You can access Cockpit using SSH tunneling:
+
+```
+ssh -L 9909:127.0.0.1:9909 root@IP
+```

@@ -25,7 +25,7 @@ if [[ "$AUTO_UPGRADES" != "no" ]]; then
     # 'yes'        → always run apt-get upgrade when this script is invoked
     # 'unattended' → run apt-get upgrade once (first time only, guarded by sentinel)
     if [[ "$AUTO_UPGRADES" == "yes" ]] || \
-       [[ "$AUTO_UPGRADES" == "unattended" && ! -f /etc/apt/apt.conf.d/.hardened ]]; then
+       [[ "$AUTO_UPGRADES" == "unattended" ]]; then
         echo "==> Applying all pending upgrades..."
         apt-get upgrade -y -qq
     fi
@@ -51,18 +51,17 @@ Unattended-Upgrade::Automatic-Reboot "false";
 EOF
 
     systemctl enable --now unattended-upgrades
-    touch /etc/apt/apt.conf.d/.hardened
     echo "✓ Unattended upgrades configured (period: every ${UPGRADE_PERIOD} day(s))"
 fi
 
 # --- Cockpit ---
 echo "==> Installing Cockpit..."
-apt install cockpit -y -qq
+apt install cockpit sscg -y -qq
 
 mkdir -p /etc/cockpit
 cat > /etc/cockpit/cockpit.conf <<EOF
 [WebService]
-Origins = https://localhost:9090
+Origins = https://localhost:9909
 AllowUnencrypted = false
 [Session]
 IdleTimeout = 15
@@ -72,8 +71,10 @@ mkdir -p /etc/systemd/system/cockpit.socket.d/
 cat > /etc/systemd/system/cockpit.socket.d/listen.conf <<EOF
 [Socket]
 ListenStream=
-ListenStream=127.0.0.1:9090
+ListenStream=127.0.0.1:9909
 EOF
+
+sed -i '/^root$/d' /etc/cockpit/disallowed-users 2>/dev/null || true
 
 systemctl daemon-reload
 systemctl enable cockpit.socket
@@ -111,18 +112,17 @@ EOF
 systemctl enable fail2ban
 systemctl restart fail2ban
 
-# --- SSH hardening ---
-echo "==> Disabling SSH password authentication..."
-sed -i 's/^#\?\s*PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
-sed -i 's/^#\?\s*KbdInteractiveAuthentication.*/KbdInteractiveAuthentication no/' /etc/ssh/sshd_config
+echo "==> Enabling SSH password authentication..."
+sed -i 's/^#\?\s*PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
+sed -i 's/^#\?\s*KbdInteractiveAuthentication.*/KbdInteractiveAuthentication yes/' /etc/ssh/sshd_config
 systemctl reload ssh
-echo "✓ SSH password login disabled (key-based auth only)"
+echo "✓ SSH password login enabled"
 
 # --- Done ---
 VPS_IP=$(hostname -I | awk '{print $1}')
 echo ""
 echo "=== Done ==="
-echo "Cockpit:  ssh -L 9090:127.0.0.1:9090 root@${VPS_IP}"
-echo "          then open https://localhost:9090"
+echo "Cockpit:  ssh -L 9909:127.0.0.1:9909 root@${VPS_IP}"
+echo "          then open https://localhost:9909"
 echo "Fail2Ban: sudo fail2ban-client status sshd"
 [[ -n "$IGNORE_IPS" ]] && echo "Whitelisted: $IGNORE_IPS"
