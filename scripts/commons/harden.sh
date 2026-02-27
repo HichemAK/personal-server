@@ -61,7 +61,7 @@ apt install cockpit sscg -y -qq
 mkdir -p /etc/cockpit
 cat > /etc/cockpit/cockpit.conf <<EOF
 [WebService]
-Origins = https://localhost:9909
+Origins = https://localhost:9909 https://127.0.0.1:9909
 AllowUnencrypted = false
 [Session]
 IdleTimeout = 15
@@ -123,6 +123,6 @@ VPS_IP=$(hostname -I | awk '{print $1}')
 echo ""
 echo "=== Done ==="
 echo "Cockpit:  ssh -L 9909:127.0.0.1:9909 root@${VPS_IP}"
-echo "          then open https://localhost:9909"
+echo "          then open https://127.0.0.1:9909"
 echo "Fail2Ban: sudo fail2ban-client status sshd"
 [[ -n "$IGNORE_IPS" ]] && echo "Whitelisted: $IGNORE_IPS"
