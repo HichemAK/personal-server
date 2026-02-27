@@ -59,7 +59,7 @@ fi
 echo ""
 ssh root@"$SERVER_IP" '
     found=false
-    for f in /root/.credentials-*; do
+    for f in ~/.credentials-*; do
         [ -f "$f" ] || continue
         found=true
         break
@@ -69,12 +69,13 @@ ssh root@"$SERVER_IP" '
         echo "  SETUP COMPLETE — Save these credentials now."
         echo "  They will not be shown again."
         echo "================================================================"
-        for f in /root/.credentials-*; do
+        for f in ~/.credentials-*; do
             [ -f "$f" ] || continue
             cat "$f"
             echo ""
         done
         echo "================================================================"
-        shred -uz /root/.credentials-* || true
+        shred -uz ~/.credentials-* || true
     fi
+    shred -uz ~/scripts/.install ~/scripts/.backup ~/scripts/.security
 '

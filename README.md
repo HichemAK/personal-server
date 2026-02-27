@@ -13,7 +13,7 @@ Deploy self-hosted services over SSH from your local machine with a single comma
 
 ## Prerequisites
 
-- A Debian-based VM accessible as `root` over SSH
+- A Debian-based VM accessible as `root` over SSH (passwordless)
 - Local commands: `ssh`, `rsync`
 - DNS records pointing each service's domain to the server — refer to the official documentation of each service for the required records
 

@@ -24,42 +24,11 @@ ssh root@$IP "sudo apt update && sudo apt install rsync -y"
 # Sync scripts to the remote server
 rsync -avz "$SCRIPT_DIR/" root@"$IP":~/scripts
 
-# Sync .install and .backup (they live one level above scripts/)
+# Sync .install, .backup and .security (they live one level above scripts/)
 rsync -avz "$SCRIPT_DIR/../.install" root@"$IP":~/scripts/.install
 rsync -avz "$SCRIPT_DIR/../.backup" root@"$IP":~/scripts/.backup
+rsync -avz "$SCRIPT_DIR/../.security" root@"$IP":~/scripts/.security
 
 ssh root@"$IP" 'sudo apt-get update && ~/scripts/commons/secure-folder.sh'
 
-# Configure unattended upgrades on first init only
-if ! ssh root@"$IP" '[ -f /etc/apt/apt.conf.d/.unattended-upgrades-configured ]'; then
-    echo "=== Configuring unattended upgrades ==="
-    ssh root@"$IP" bash <<'REMOTE'
-# Apply all pending updates immediately
-apt-get upgrade -y
-
-apt-get install -y unattended-upgrades
-
-cat > /etc/apt/apt.conf.d/20auto-upgrades <<'EOF'
-APT::Periodic::Update-Package-Lists "1";
-APT::Periodic::Download-Upgradeable-Packages "1";
-APT::Periodic::Unattended-Upgrade "1";
-APT::Periodic::AutocleanInterval "7";
-EOF
-
-cat > /etc/apt/apt.conf.d/50unattended-upgrades <<'EOF'
-Unattended-Upgrade::Origins-Pattern {
-    "origin=*";
-};
-Unattended-Upgrade::AutoFixInterruptedDpkg "true";
-Unattended-Upgrade::MinimalSteps "true";
-Unattended-Upgrade::Remove-Unused-Dependencies "true";
-Unattended-Upgrade::Automatic-Reboot "false";
-EOF
-
-systemctl enable --now unattended-upgrades
-touch /etc/apt/apt.conf.d/.unattended-upgrades-configured
-REMOTE
-    echo "✓ Unattended upgrades configured (daily, no auto-reboot)"
-else
-    echo "✓ Unattended upgrades already configured, skipping"
-fi
+ssh root@"$IP" '~/scripts/commons/harden.sh'
