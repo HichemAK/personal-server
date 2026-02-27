@@ -18,7 +18,7 @@ fi
 source ./setup-nextcloud/config-nginx.sh
 sudo systemctl reload nginx
 
-wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/local/bin/yq && chmod +x /usr/local/bin/yq
+./commons/install-yq.sh
 cd setup-nextcloud
 
 wget https://raw.githubusercontent.com/nextcloud/all-in-one/refs/heads/main/compose.yaml
