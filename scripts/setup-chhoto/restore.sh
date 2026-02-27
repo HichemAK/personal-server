@@ -79,7 +79,6 @@ docker run --rm \
     alpine sh -c 'rm -f /db/urls.sqlite-wal /db/urls.sqlite-shm'
 
 # Update compose.yaml to use the restored password so the service accepts it
-~/scripts/commons/install-yq.sh
 yq -i '.services.chhoto-url.environment.password = strenv(DECRYPT_PASSWORD)' \
     ~/scripts/setup-chhoto/compose.yaml
 echo "✓ Password updated in compose.yaml"

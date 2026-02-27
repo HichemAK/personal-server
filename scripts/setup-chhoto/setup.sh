@@ -12,6 +12,7 @@ CHHOTO_PASSWORD="$(openssl rand -base64 32 | tr -d '\n')"
 
 ./commons/install-docker.sh
 ./commons/install-nginx.sh
+./commons/install-yq.sh
 
 mkdir -p ~/scripts/setup-chhoto
 
@@ -36,6 +37,7 @@ services:
 
 volumes:
   chhoto-db:
+    name: chhoto-db
 EOF
 
 cd ~/scripts/setup-chhoto

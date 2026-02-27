@@ -28,6 +28,15 @@ echo "=== Backing up Chhoto URL to ${BACKUP_DIR} ==="
 
 cd ~/scripts/setup-chhoto
 
+# Read the auto-generated password from compose.yaml
+CHHOTO_PASSWORD=$(yq '.services.chhoto-url.environment.password' ~/scripts/setup-chhoto/compose.yaml)
+
+# Check if the database exists before stopping the container
+if ! docker run --rm -v chhoto-db:/db:ro alpine sh -c 'test -f /db/urls.sqlite'; then
+    echo "No database file found (no URLs created yet), skipping backup"
+    exit 0
+fi
+
 # Stop the container to ensure a clean copy with no pending WAL transactions
 docker compose stop chhoto-url
 
