@@ -55,7 +55,10 @@ SERVER_IP=
 
 
 # =============================================================================
-# [VaultWarden]
+# [VaultWarden]   https://github.com/dani-garcia/vaultwarden
+#
+# Unofficial Bitwarden-compatible server. Self-hostable password manager with
+# a full-featured web vault, browser extensions, and mobile app support.
 #
 # ACTION_VAULTWARDEN    : install   – install the service; no-op if already installed
 #                         uninstall – uninstall the service; no-op if not installed
@@ -70,7 +73,10 @@ VAULTWARDEN_DATA_DIR=/data/vw  # host path for persistent data (empty --> defaul
 
 
 # =============================================================================
-# [Mailcow]
+# [Mailcow]   https://github.com/mailcow/mailcow-dockerized
+#
+# Full-featured mail server suite (Postfix, Dovecot, Rspamd, SOGo, and more)
+# packaged as Docker Compose. Handles SMTP, IMAP, spam filtering, and webmail.
 #
 # ACTION_MAILCOW   : install | uninstall | reinstall | (empty to skip)
 # =============================================================================
@@ -81,7 +87,10 @@ MAILCOW_TZ=              # timezone passed to generate_config.sh, e.g. Europe/Be
 
 
 # =============================================================================
-# [Nextcloud]
+# [Nextcloud]   https://github.com/nextcloud/all-in-one
+#
+# Self-hosted cloud storage and collaboration platform (files, calendar,
+# contacts, office). Deployed via the official All-in-One Docker image.
 #
 # ACTION_NEXTCLOUD   : install | uninstall | reinstall | (empty to skip)
 # NEXTCLOUD_DATA_DIR : host path for Nextcloud's data directory (NEXTCLOUD_DATADIR
@@ -105,7 +114,10 @@ NEXTCLOUD_EXTERNAL_MOUNTS=
 
 
 # =============================================================================
-# [Chhoto URL]
+# [Chhoto URL]   https://github.com/SinTan1729/chhoto-url
+#
+# Minimal self-hosted URL shortener written in Rust. Single container,
+# SQLite database, password-protected web UI and API.
 #
 # ACTION_CHHOTO      : install | uninstall | reinstall | (empty to skip)
 # CHHOTO_FQDN        : short-link domain, e.g. s.yourdomain.com
@@ -118,7 +130,10 @@ CHHOTO_SLUG_STYLE=Pair
 
 
 # =============================================================================
-# [OpenMediaVault]
+# [OpenMediaVault]   https://github.com/openmediavault/openmediavault
+#
+# NAS (Network Attached Storage) operating system based on Debian. Provides
+# a web UI to manage disks, shares (SMB/NFS/SFTP), and plugins.
 #
 # ACTION_OMV : install | uninstall | reinstall | (empty to skip)
 # =============================================================================

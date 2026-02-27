@@ -1,6 +1,15 @@
 # Personal Server Setup
 
-Deploy services (VaultWarden, Mailcow, Nextcloud) over SSH from your local machine with a single command.
+Deploy self-hosted services over SSH from your local machine with a single command.
+
+## Services
+
+| Service | Description |
+|---|---|
+| [VaultWarden](https://github.com/dani-garcia/vaultwarden) | Unofficial Bitwarden-compatible password manager server |
+| [Mailcow](https://github.com/mailcow/mailcow-dockerized) | Full-featured mail server suite (SMTP, IMAP, webmail, spam filtering) |
+| [Nextcloud AIO](https://github.com/nextcloud/all-in-one) | Self-hosted cloud storage and collaboration platform |
+| [Chhoto URL](https://github.com/SinTan1729/chhoto-url) | Minimal self-hosted URL shortener |
 
 ## Prerequisites
 
