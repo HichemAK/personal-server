@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # VPS Security Setup — Cockpit + Fail2Ban
 # Configure options in ~/scripts/.security before running.
+# Needs to be idempotent
 
 set -euo pipefail
 
@@ -75,7 +76,8 @@ ListenStream=127.0.0.1:9090
 EOF
 
 systemctl daemon-reload
-systemctl enable --now cockpit.socket
+systemctl enable cockpit.socket
+systemctl restart cockpit.socket
 
 # --- Fail2Ban ---
 echo "==> Installing Fail2Ban..."
@@ -83,7 +85,8 @@ apt install fail2ban -y -qq
 
 IGNORE="127.0.0.1/8 ::1${IGNORE_IPS:+ $IGNORE_IPS}"
 
-cat > /etc/fail2ban/jail.local <<EOF
+{
+    cat <<EOF
 [DEFAULT]
 ignoreip  = ${IGNORE}
 bantime   = ${BANTIME}
@@ -94,18 +97,19 @@ backend   = systemd
 [sshd]
 enabled = true
 EOF
-
-if [[ "$NGINX_JAIL" == "yes" ]]; then
-    cat >> /etc/fail2ban/jail.local <<EOF
+    if [[ "$NGINX_JAIL" == "yes" ]]; then
+        cat <<EOF
 
 [nginx-http-auth]
 enabled  = true
 port     = http,https
 logpath  = /var/log/nginx/error.log
 EOF
-fi
+    fi
+} > /etc/fail2ban/jail.local
 
-systemctl enable --now fail2ban
+systemctl enable fail2ban
+systemctl restart fail2ban
 
 # --- SSH hardening ---
 echo "==> Disabling SSH password authentication..."
