@@ -77,5 +77,5 @@ ssh root@"$SERVER_IP" '
         echo "================================================================"
         shred -uz -n 6 ~/.credentials-* || true
     fi
-    shred -uz -n 6 ~/scripts/.*
+    # shred -uz -n 6 ~/scripts/.*
 '
