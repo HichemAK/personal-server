@@ -25,9 +25,7 @@ ssh root@$IP "sudo apt update && sudo apt install rsync -y"
 rsync -avz "$SCRIPT_DIR/" root@"$IP":~/scripts
 
 # Sync .install, .backup and .security (they live one level above scripts/)
-rsync -avz "$SCRIPT_DIR/../.install" root@"$IP":~/scripts/.install
-rsync -avz "$SCRIPT_DIR/../.backup" root@"$IP":~/scripts/.backup
-rsync -avz "$SCRIPT_DIR/../.security" root@"$IP":~/scripts/.security
+rsync -avz "$SCRIPT_DIR/../.install" "$SCRIPT_DIR/../.backup" "$SCRIPT_DIR/../.security" root@"$IP":~/scripts/
 
 ssh root@"$IP" 'sudo apt-get update && ~/scripts/commons/secure-folder.sh'
 
