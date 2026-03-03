@@ -15,6 +15,7 @@ before = common.conf
 
 [Definition]
 failregex = ^.*?Username or password is incorrect\. Try again\. IP: <ADDR>\. Username:.*$
+            ^.*?Invalid admin token\. IP: <ADDR>$
 ignoreregex =
 EOF
 
@@ -26,6 +27,7 @@ enabled  = true
 port     = http,https
 filter   = vaultwarden
 logpath  = ${VW_LOG}
+backend  = auto
 EOF
 
 fail2ban-client reload
