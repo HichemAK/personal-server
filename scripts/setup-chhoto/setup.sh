@@ -49,9 +49,11 @@ source ./setup-chhoto/config-nginx.sh
 sudo systemctl reload nginx
 
 if [ -n "${CU_BACKUP_MOUNT:-}" ]; then
-    echo "${CU_BACKUP_CRON:-0 1 * * *} root bash ~/scripts/setup-chhoto/backup.sh >> /var/log/chhoto-backup.log 2>&1" \
+    printf 'PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin\n%s root bash ~/scripts/setup-chhoto/backup.sh >> /var/log/chhoto-backup.log 2>&1\n' \
+        "${CU_BACKUP_CRON:-0 1 * * *}" \
         | sudo tee /etc/cron.d/chhoto-backup > /dev/null
     echo "✓ Chhoto URL backup cron installed (${CU_BACKUP_CRON:-0 1 * * *})"
+
 fi
 
 CREDS_FILE=/root/.credentials-chhoto
