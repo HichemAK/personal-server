@@ -64,12 +64,10 @@ SERVER_IP=
 #                         uninstall – uninstall the service; no-op if not installed
 #                         reinstall – uninstall then install (install if not present)
 #                         (empty)   – skip this service entirely
-# VAULTWARDEN_DATA_DIR  : host path for persistent data (bind-mounted into the container)
 # =============================================================================
 
 ACTION_VAULTWARDEN=
 VAULTWARDEN_FQDN=         # fully qualified domain, e.g. vw.yourdomain.com
-VAULTWARDEN_DATA_DIR=/data/vw  # host path for persistent data (empty --> default value)
 
 
 # =============================================================================

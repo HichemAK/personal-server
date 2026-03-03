@@ -23,7 +23,7 @@ echo "✓ Removed rclone config volume"
 rm -f ~/scripts/compose.yaml
 echo "✓ Removed compose.yaml"
 
-rm -rf $VAULTWARDEN_DATA_DIR
+rm -rf /data/vw
 echo "✓ Removed vault warden data"
 
 

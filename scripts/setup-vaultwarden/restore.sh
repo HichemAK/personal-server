@@ -11,7 +11,7 @@ if [ -z "${VW_BACKUP_ZIP_PASSWORD:-}" ]; then
     exit 1
 fi
 
-DATA_DIR="${VAULTWARDEN_DATA_DIR:-$HOME/vw-data}"
+DATA_DIR="/data/vw"
 REMOTE_NAME="VaultWardenBackup"
 RCLONE_DIR="${VW_BACKUP_RCLONE_DIR:-/VaultWardenBackup}"
 
@@ -66,7 +66,7 @@ docker run --rm \
     ttionya/vaultwarden-backup:latest \
     restore --zip-file "/bitwarden/restore/${BACKUP_FILENAME}" \
             --password "${VW_BACKUP_ZIP_PASSWORD}" --force-restore
-rm -f "${VAULTWARDEN_DATA_DIR}/db.sqlite3-wal" "${VAULTWARDEN_DATA_DIR}/db.sqlite3-shm"
+rm -f "/data/vw/db.sqlite3-wal" "/data/vw/db.sqlite3-shm"
 echo "✓ VaultWarden restored"
 
 # Restart

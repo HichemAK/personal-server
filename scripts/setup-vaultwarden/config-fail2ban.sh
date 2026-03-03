@@ -18,7 +18,7 @@ failregex = ^.*?Username or password is incorrect\. Try again\. IP: <ADDR>\. Use
 ignoreregex =
 EOF
 
-VW_LOG="${VAULTWARDEN_DATA_DIR:-/root/vw-data}/vaultwarden.log"
+VW_LOG="/data/vw/vaultwarden.log"
 
 cat > /etc/fail2ban/jail.d/vaultwarden.local <<EOF
 [vaultwarden]
