@@ -35,11 +35,16 @@ UPGRADE_PERIOD=1            # days between unattended upgrade runs
 #                 Use -1 for a permanent ban.
 # FINDTIME      : Time window in seconds in which MAXRETRY must occur (default: 600).
 # MAXRETRY      : Number of failures before a ban is triggered (default: 3).
-# NGINX_JAIL    : Set to "yes" to also ban IPs failing nginx HTTP auth.
+#
+# Any IP banned twice across any jail is permanently banned on all ports
+# (recidive jail). Per-service jails inherit BANTIME / FINDTIME / MAXRETRY.
+#
+# Per-service jails (set to "yes" to enable):
+# VAULTWARDEN_JAIL
 # =============================================================================
 
 IGNORE_IPS=""           # e.g. "1.2.3.4 2001:db8::1"
 BANTIME=3600            # 1 hour
 FINDTIME=600            # 10 minutes
 MAXRETRY=3
-NGINX_JAIL=no
+VAULTWARDEN_JAIL=yes

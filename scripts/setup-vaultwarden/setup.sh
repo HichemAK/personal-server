@@ -17,6 +17,7 @@ if [ -n "${VW_BACKUP_MOUNT:-}" ] && [ -n "${VW_BACKUP_ZIP_PASSWORD:-}" ]; then
     ./setup-vaultwarden/config-backup.sh
 fi
 
+source ./setup-vaultwarden/config-fail2ban.sh
 source ./setup-vaultwarden/config-nginx.sh
 sudo systemctl reload nginx
 

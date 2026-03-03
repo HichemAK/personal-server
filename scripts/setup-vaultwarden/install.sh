@@ -16,6 +16,7 @@ services:
       DOMAIN: "https://${VAULTWARDEN_FQDN}"
       ADMIN_TOKEN: "$VW_ADMIN_TOKEN"
       SIGNUPS_ALLOWED: false
+      LOG_FILE: /data/vaultwarden.log
     volumes:
       - ${VAULTWARDEN_DATA_DIR:-$HOME/vw-data}:/data/
     ports:
