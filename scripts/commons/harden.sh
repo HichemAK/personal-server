@@ -107,6 +107,16 @@ port     = http,https
 logpath  = /var/log/nginx/error.log
 EOF
     fi
+    cat <<'EOF'
+
+[recidive]
+enabled    = true
+logpath    = /var/log/fail2ban.log
+banaction  = iptables-allports
+bantime    = -1
+findtime   = -1
+maxretry   = 2
+EOF
 } > /etc/fail2ban/jail.local
 
 systemctl enable fail2ban
