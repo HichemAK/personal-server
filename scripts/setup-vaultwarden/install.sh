@@ -6,7 +6,7 @@ cd "$SCRIPT_DIR"
 
 export VW_ADMIN_TOKEN="$(openssl rand -hex 24)"
 
-sudo tee compose.yaml > /dev/null <<EOF
+sudo tee setup-vaultwarden/compose.yaml > /dev/null <<EOF
 services:
   vaultwarden:
     image: vaultwarden/server:latest
@@ -23,7 +23,7 @@ services:
 EOF
 
 if [ -n "${VW_BACKUP_MOUNT:-}" ] && [ -n "${VW_BACKUP_ZIP_PASSWORD:-}" ]; then
-    sudo tee -a compose.yaml > /dev/null <<EOF
+    sudo tee -a setup-vaultwarden/compose.yaml > /dev/null <<EOF
 
   vaultwarden-backup:
     image: ttionya/vaultwarden-backup:latest

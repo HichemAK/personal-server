@@ -20,7 +20,7 @@ echo "✓ Removed containers"
 docker volume rm vaultwarden-rclone-data 2>/dev/null || true
 echo "✓ Removed rclone config volume"
 
-rm -f ~/scripts/compose.yaml
+rm -f ~/scripts/setup-vaultwarden/compose.yaml
 echo "✓ Removed compose.yaml"
 
 rm -rf /data/vw
