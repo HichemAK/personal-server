@@ -91,10 +91,6 @@ MAILCOW_TZ=              # timezone passed to generate_config.sh, e.g. Europe/Be
 # contacts, office). Deployed via the official All-in-One Docker image.
 #
 # ACTION_NEXTCLOUD   : install | uninstall | reinstall | (empty to skip)
-# NEXTCLOUD_DATA_DIR : host path for Nextcloud's data directory (NEXTCLOUD_DATADIR
-#                      in the AIO compose override)
-#                      ⚠ Do not change after the initial install — data will not migrate.
-#
 # NEXTCLOUD_EXTERNAL_MOUNTS: space-separated list of mount slot numbers
 # (the N in MOUNT_N_USER) to register as Nextcloud external storage.
 # Each listed mount is added to Nextcloud's Files UI as a remote drive.
@@ -107,7 +103,6 @@ MAILCOW_TZ=              # timezone passed to generate_config.sh, e.g. Europe/Be
 
 ACTION_NEXTCLOUD=
 NEXTCLOUD_FQDN=      # fully qualified domain, e.g. cloud.yourdomain.com
-NEXTCLOUD_DATA_DIR=  # host path for Nextcloud's data directory (empty --> default value)
 NEXTCLOUD_EXTERNAL_MOUNTS=
 
 

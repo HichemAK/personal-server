@@ -25,6 +25,11 @@ echo "✓ Removed nextcloud volumes"
 rm -f /etc/nginx/conf.d/nextcloud.conf
 echo "✓ Removed nginx config"
 
+rm -f /etc/fail2ban/filter.d/nextcloud.local
+rm -f /etc/fail2ban/jail.d/nextcloud.local
+fail2ban-client reload 2>/dev/null || true
+echo "✓ Removed fail2ban jail"
+
 systemctl reload nginx 2>/dev/null || true
 
 echo "✓ Nextcloud removed"

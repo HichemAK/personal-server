@@ -11,11 +11,8 @@ source ~/scripts/.backup
 ./commons/install-nginx.sh
 ./commons/install-docker.sh
 
-if [ -n "${NEXTCLOUD_DATA_DIR:-}" ]; then
-    mkdir -p "${NEXTCLOUD_DATA_DIR}"
-fi
-
 source ./setup-nextcloud/config-nginx.sh
+./setup-nextcloud/config-fail2ban.sh
 sudo systemctl reload nginx
 
 ./commons/install-yq.sh
@@ -25,9 +22,7 @@ wget https://raw.githubusercontent.com/nextcloud/all-in-one/refs/heads/main/comp
 yq -i '(.services.nextcloud-aio-mastercontainer.ports[] | select(. == "*8080:8080*")) = "127.0.0.1:8080:8080"' compose.yaml
 yq -i 'del(.services.nextcloud-aio-mastercontainer.ports[] | select(. == "*80:80*"))' compose.yaml
 yq -i 'del(.services.nextcloud-aio-mastercontainer.ports[] | select(. == "*8443:8443*"))' compose.yaml
-if [ -n "${NEXTCLOUD_DATA_DIR:-}" ]; then
-    yq -i ".services.nextcloud-aio-mastercontainer.environment.NEXTCLOUD_DATADIR = \"${NEXTCLOUD_DATA_DIR}\"" override.yaml
-fi
+
 if [ -n "${NC_BORG_RETENTION_POLICY:-}" ]; then
     yq -i ".services.nextcloud-aio-mastercontainer.environment.BORG_RETENTION_POLICY = \"${NC_BORG_RETENTION_POLICY}\"" override.yaml
 fi
