@@ -46,6 +46,7 @@ docker compose up -d
 cd "$SCRIPT_DIR"
 
 source ./setup-chhoto/config-nginx.sh
+./setup-chhoto/config-fail2ban.sh
 sudo systemctl reload nginx
 
 if [ -n "${CU_BACKUP_MOUNT:-}" ]; then

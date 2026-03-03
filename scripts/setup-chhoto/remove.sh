@@ -22,6 +22,11 @@ echo "✓ Removed nginx config"
 rm -f /etc/cron.d/chhoto-backup
 echo "✓ Removed backup cron"
 
+rm -f /etc/fail2ban/filter.d/chhoto.local
+rm -f /etc/fail2ban/jail.d/chhoto.local
+fail2ban-client reload 2>/dev/null || true
+echo "✓ Removed fail2ban jail"
+
 systemctl reload nginx 2>/dev/null || true
 
 echo "✓ Chhoto URL removed"

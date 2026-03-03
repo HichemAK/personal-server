@@ -41,6 +41,7 @@ UPGRADE_PERIOD=1            # days between unattended upgrade runs
 #
 # Per-service jails (set to "yes" to enable):
 # VAULTWARDEN_JAIL
+# CHHOTO_JAIL
 # =============================================================================
 
 IGNORE_IPS=""           # e.g. "1.2.3.4 2001:db8::1"
@@ -48,3 +49,4 @@ BANTIME=3600            # 1 hour
 FINDTIME=600            # 10 minutes
 MAXRETRY=3
 VAULTWARDEN_JAIL=yes
+CHHOTO_JAIL=yes

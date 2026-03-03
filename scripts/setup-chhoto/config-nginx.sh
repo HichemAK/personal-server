@@ -22,6 +22,8 @@ server {
   ssl_certificate     /etc/letsencrypt/live/$SERVER/fullchain.pem;
   ssl_certificate_key /etc/letsencrypt/live/$SERVER/privkey.pem;
 
+  access_log /var/log/nginx/chhoto-access.log;
+
   proxy_set_header Host \$host;
   proxy_set_header X-Forwarded-Proto https;
   proxy_set_header X-Real-IP \$remote_addr;
