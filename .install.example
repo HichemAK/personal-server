@@ -1,0 +1,150 @@
+# =============================================================================
+# WARNING: THIS FILE CONTAINS PASSWORDS STORED IN PLAIN TEXT.
+#
+# Immediately after filling in your values, run:
+#   chmod 600 .install
+#
+# NEVER commit your credentials to version control.
+# =============================================================================
+
+# =============================================================================
+# [Global]
+# =============================================================================
+
+# IPv4 address of the remote VM to provision (IPv6 untested)
+SERVER_IP=
+
+
+# =============================================================================
+# [Mounts]
+#
+# Define one or more remote drives to mount using numbered variables.
+# Add MOUNT_2_*, MOUNT_3_*, etc. for additional drives.
+#
+# MOUNT_N_TYPE    : sftp | smb | webdav | none
+#                   Use "none" to skip a slot without renumbering.
+# MOUNT_N_USER    : Username on the storage server (e.g. u123456)
+# MOUNT_N_ADDRESS : Hostname or IP of the storage server
+#                   (e.g. u123456.your-storagebox.de)
+# MOUNT_N_POINT   : Local path where the drive will be mounted
+#                   (e.g. /mnt/storagebox)
+# MOUNT_N_PASS    : Password for authentication
+# MOUNT_N_PORT    : [SFTP only, optional] Port to use. Defaults to 22.
+#                   Hetzner Storage Boxes use port 23 — set explicitly.
+# MOUNT_N_COPY_SSH_KEY : [SFTP only, optional] Set to "true" to copy the server's
+#                        SSH public key to the remote, enabling passwordless SSH access
+#                        (e.g. for rclone via ssh://user@host:port/path).
+#                        An ed25519 keypair is generated at /root/.ssh/id_ed25519 if
+#                        one does not already exist. Requires sshpass (auto-installed).
+#
+# Example (Hetzner Storage Box over SFTP):
+#   MOUNT_1_TYPE=sftp
+#   MOUNT_1_USER=u123456
+#   MOUNT_1_ADDRESS=u123456.your-storagebox.de
+#   MOUNT_1_POINT=/mnt/storagebox
+#   MOUNT_1_PASS=mysecretpassword
+#   MOUNT_1_PORT=23
+#
+# Example (second mount over SMB):
+#   MOUNT_2_TYPE=smb
+#   MOUNT_2_USER=u654321
+#   MOUNT_2_ADDRESS=u654321.your-storagebox.de
+#   MOUNT_2_POINT=/mnt/backup
+#   MOUNT_2_PASS=anotherpassword
+# =============================================================================
+
+
+
+# =============================================================================
+# [VaultWarden]   https://github.com/dani-garcia/vaultwarden
+#
+# Unofficial Bitwarden-compatible server. Self-hostable password manager with
+# a full-featured web vault, browser extensions, and mobile app support.
+#
+# ACTION_VAULTWARDEN    : install   – install the service; no-op if already installed
+#                         uninstall – uninstall the service; no-op if not installed
+#                         reinstall – uninstall then install (install if not present)
+#                         (empty)   – skip this service entirely
+# =============================================================================
+
+ACTION_VAULTWARDEN=
+VAULTWARDEN_FQDN=         # fully qualified domain, e.g. vw.yourdomain.com
+
+
+# =============================================================================
+# [Mailcow]   https://github.com/mailcow/mailcow-dockerized
+#
+# Full-featured mail server suite (Postfix, Dovecot, Rspamd, SOGo, and more)
+# packaged as Docker Compose. Handles SMTP, IMAP, spam filtering, and webmail.
+#
+# ACTION_MAILCOW   : install | uninstall | reinstall | (empty to skip)
+# =============================================================================
+
+ACTION_MAILCOW=
+MAILCOW_FQDN=    # fully qualified domain, e.g. mail.yourdomain.com
+MAILCOW_TZ=              # timezone passed to generate_config.sh, e.g. Europe/Berlin
+
+
+# =============================================================================
+# [Nextcloud]   https://github.com/nextcloud/all-in-one
+#
+# Self-hosted cloud storage and collaboration platform (files, calendar,
+# contacts, office). Deployed via the official All-in-One Docker image.
+#
+# ACTION_NEXTCLOUD   : install | uninstall | reinstall | (empty to skip)
+# NEXTCLOUD_EXTERNAL_MOUNTS: space-separated list of mount slot numbers
+# (the N in MOUNT_N_USER) to register as Nextcloud external storage.
+# Each listed mount is added to Nextcloud's Files UI as a remote drive.
+# Leave empty to skip external storage setup.
+#
+# Examples:
+#   NEXTCLOUD_EXTERNAL_MOUNTS=1          # add only mount 1
+#   NEXTCLOUD_EXTERNAL_MOUNTS="1 2"      # add mounts 1 and 2
+# =============================================================================
+
+ACTION_NEXTCLOUD=
+NEXTCLOUD_FQDN=      # fully qualified domain, e.g. cloud.yourdomain.com
+NEXTCLOUD_EXTERNAL_MOUNTS=
+
+
+# =============================================================================
+# [Chhoto URL]   https://github.com/SinTan1729/chhoto-url
+#
+# Minimal self-hosted URL shortener written in Rust. Single container,
+# SQLite database, password-protected web UI and API.
+#
+# ACTION_CHHOTO      : install | uninstall | reinstall | (empty to skip)
+# CHHOTO_FQDN        : short-link domain, e.g. s.yourdomain.com
+# CHHOTO_SLUG_STYLE  : "Pair" (adjective-name) or "UID" (random string)
+# =============================================================================
+
+ACTION_CHHOTO=
+CHHOTO_FQDN=
+CHHOTO_SLUG_STYLE=Pair
+
+
+# =============================================================================
+# [Stoat]   https://github.com/stoatchat/self-hosted
+#
+# Self-hosted chat platform (Revolt-based). Multi-container stack with
+# MongoDB, MinIO object storage, and LiveKit voice/video.
+# Requires open firewall ports: 7881/tcp, 50000-50100/udp (LiveKit).
+#
+# ACTION_STOAT : install | uninstall | reinstall | (empty to skip)
+# STOAT_FQDN   : domain for the chat UI, e.g. chat.yourdomain.com
+# =============================================================================
+
+ACTION_STOAT=
+STOAT_FQDN=      # e.g. chat.yourdomain.com
+
+
+# =============================================================================
+# [OpenMediaVault]   https://github.com/openmediavault/openmediavault
+#
+# NAS (Network Attached Storage) operating system based on Debian. Provides
+# a web UI to manage disks, shares (SMB/NFS/SFTP), and plugins.
+#
+# ACTION_OMV : install | uninstall | reinstall | (empty to skip)
+# =============================================================================
+
+ACTION_OMV= # (UNTESTED - NOT RECOMMENDED)

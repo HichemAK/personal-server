@@ -18,13 +18,13 @@ Deploy self-hosted services over SSH from your local machine with a single comma
 - DNS records pointing each service's domain to the server — refer to the official documentation of each service for the required records
 
 ## Quick Start
-
+0. Remove `*.example` extension from dot files (`.install`, `.backup`, `.security`).
 1. Fill in `.install` with your server IP, domains, and the services to install. All options are documented inside the file.
 2. Fill in `.backup` with your backup schedule and remote storage credentials. All options are documented inside the file.
 3. Run the setup:
-   ```bash
-   ./setup.sh
-   ```
+```bash
+./setup.sh
+```
 
 Credentials for installed services are displayed once at the end of the run. Save them — they will not be shown again.
 
