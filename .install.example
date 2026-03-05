@@ -124,21 +124,6 @@ CHHOTO_SLUG_STYLE=Pair
 
 
 # =============================================================================
-# [Stoat]   https://github.com/stoatchat/self-hosted
-#
-# Self-hosted chat platform (Revolt-based). Multi-container stack with
-# MongoDB, MinIO object storage, and LiveKit voice/video.
-# Requires open firewall ports: 7881/tcp, 50000-50100/udp (LiveKit).
-#
-# ACTION_STOAT : install | uninstall | reinstall | (empty to skip)
-# STOAT_FQDN   : domain for the chat UI, e.g. chat.yourdomain.com
-# =============================================================================
-
-ACTION_STOAT=
-STOAT_FQDN=      # e.g. chat.yourdomain.com
-
-
-# =============================================================================
 # [OpenMediaVault]   https://github.com/openmediavault/openmediavault
 #
 # NAS (Network Attached Storage) operating system based on Debian. Provides
