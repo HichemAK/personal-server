@@ -130,12 +130,21 @@ CHHOTO_SLUG_STYLE=Pair
 # MongoDB, MinIO object storage, and LiveKit voice/video.
 # Requires open firewall ports: 7881/tcp, 50000-50100/udp (LiveKit).
 #
-# ACTION_STOAT : install | uninstall | reinstall | (empty to skip)
-# STOAT_FQDN   : domain for the chat UI, e.g. chat.yourdomain.com
+# ACTION_STOAT        : install | uninstall | reinstall | (empty to skip)
+# STOAT_FQDN          : domain for the chat UI, e.g. chat.yourdomain.com
+# STOAT_SMTP_HOST     : SMTP server hostname (empty = disable email verification)
+# STOAT_SMTP_USERNAME : SMTP login username
+# STOAT_SMTP_PASSWORD : SMTP login password
+# STOAT_SMTP_FROM     : From address for outgoing emails
 # =============================================================================
 
 ACTION_STOAT=
 STOAT_FQDN=      # e.g. chat.yourdomain.com
+STOAT_SMTP_HOST=                     # e.g. smtp.mailgun.org (empty = no email verification)
+STOAT_SMTP_USERNAME=
+STOAT_SMTP_PASSWORD=
+STOAT_SMTP_FROM=                     # e.g. noreply@yourdomain.com
+
 
 
 # =============================================================================

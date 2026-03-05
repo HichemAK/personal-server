@@ -49,10 +49,15 @@ if [ -n "${ACTION_OMV:-}" ]; then
     "$SCRIPT_DIR/scripts/setup-omv/start.sh"
 fi
 
+if [ -n "${ACTION_STOAT:-}" ]; then
+    _installed=true
+    "$SCRIPT_DIR/scripts/setup-stoat/start.sh"
+fi
+
 if [ "$_installed" = "false" ]; then
     echo "No services selected."
     echo "Set ACTION_VAULTWARDEN, ACTION_MAILCOW, ACTION_NEXTCLOUD,"
-    echo "ACTION_CHHOTO, or ACTION_OMV to install, uninstall, or reinstall in .install."
+    echo "ACTION_CHHOTO, ACTION_OMV, or ACTION_STOAT to install, uninstall, or reinstall in .install."
 fi
 
 # Display and clean up credentials from all installed services
