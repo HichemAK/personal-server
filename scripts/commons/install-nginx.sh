@@ -18,5 +18,17 @@ echo -e "Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 
 sudo apt update
 sudo apt install nginx -y
 
-sudo systemctl start nginx
+# --- auto-restart setup ---
+sudo systemctl enable nginx
+
+sudo mkdir -p /etc/systemd/system/nginx.service.d
+sudo tee /etc/systemd/system/nginx.service.d/override.conf > /dev/null <<'EOF'
+[Service]
+Restart=always
+RestartSec=30s
+EOF
+
+sudo systemctl daemon-reload
+sudo systemctl restart nginx
+
 echo "✓ Nginx installed"
